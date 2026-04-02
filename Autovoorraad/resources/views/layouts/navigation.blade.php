@@ -1,100 +1,48 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false }" class="bg-[#0E1C2B] border-b fixed min-h-screen w-1/4 top-0 left-0 border-gray-100">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="flex items-center p-24">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        <x-application-logo class="block h-auto w-full fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+            <div class="flex  flex-col gap-6">
+        
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mr-4" width="52" height="52" viewBox="0 0 52 52" fill="none">
+                            <path d="M51.675 39.7008C51.6141 40.1172 51.5125 40.5234 51.3602 40.8383C51.086 41.3969 50.8219 41.4477 49.786 41.3969C48.4453 41.3359 46.5258 41.3969 44.4946 41.4781C44.4946 42.0367 44.5149 42.3008 44.5149 42.3008C44.6469 43.8344 45.3375 43.8852 45.6117 43.8852H49.9789C50.3649 43.8852 50.7203 43.8852 50.9946 43.7023C51.35 43.4687 51.5024 42.7883 51.6344 41.6C51.6547 41.4273 51.6649 41.2039 51.675 40.9398V40.9297C51.675 40.8484 51.6852 40.7469 51.6852 40.6352V40.5234C51.6852 40.2492 51.6852 39.9445 51.675 39.7008ZM0.304712 39.7008C0.365649 40.1172 0.467212 40.5234 0.619556 40.8383C0.893774 41.3969 1.15784 41.4477 2.19377 41.3969C3.5344 41.3359 5.45393 41.3969 7.48518 41.4781C7.48518 42.0367 7.46487 42.3008 7.46487 42.3008C7.33284 43.8344 6.64221 43.8852 6.36799 43.8852H2.00081C1.61487 43.8852 1.28987 43.8852 0.985181 43.7023C0.619556 43.4891 0.477368 42.7883 0.345337 41.6C0.325024 41.4273 0.314868 41.2039 0.304712 40.9398V40.9297C0.304712 40.8484 0.294556 40.7469 0.294556 40.6352V40.5234C0.304712 40.2492 0.304712 39.9445 0.304712 39.7008Z" fill="white"/>
+                            <path d="M52 30.1234C52 27.0055 51.5938 23.9586 51.4312 23.6234C51.3094 23.3797 50.5273 22.7398 48.75 21.5312C46.9523 20.3023 46.993 20.4852 46.668 19.6828C46.9625 19.5914 47.2469 19.4187 47.4195 19.3984C47.8055 19.3578 47.8258 19.7234 48.6281 19.7234C49.4305 19.7234 51.1672 19.5102 51.5227 19.1547C51.8781 18.7992 51.9898 18.6773 51.9898 18.3625C51.9898 18.0477 51.807 17.3977 51.4617 17.0117C51.1164 16.6258 49.6437 16.4328 48.7805 16.3211C47.9172 16.2094 47.7953 16.3211 47.5719 16.4633C47.2164 16.6867 47.1961 18.7281 47.1961 18.7281L46.3531 18.7484C45.8047 17.3977 45.043 14.6758 43.8547 12.5328C42.5547 10.1969 41.1937 9.46563 40.625 9.28281C40.0664 9.11016 39.5586 8.98828 35.75 8.60234C31.8602 8.19609 28.7625 8.14531 26 8.14531C23.2375 8.14531 20.1398 8.20625 16.25 8.60234C12.4414 8.99844 11.9336 9.11016 11.375 9.28281C10.8164 9.45547 9.44531 10.1969 8.14531 12.5328C6.95703 14.6758 6.19531 17.3977 5.64687 18.7484L4.80391 18.7281C4.80391 18.7281 4.79375 16.6867 4.42812 16.4633C4.20469 16.3211 4.08281 16.1992 3.21953 16.3211C2.35625 16.443 0.883594 16.6258 0.538281 17.0117C0.192969 17.3977 0.0101563 18.0477 0.0101563 18.3625C0.0101563 18.6773 0.121875 18.8094 0.477344 19.1547C0.832812 19.5102 2.56953 19.7234 3.37188 19.7234C4.17422 19.7234 4.19453 19.3578 4.58047 19.3984C4.75312 19.4187 5.04766 19.5914 5.33203 19.6828C4.99687 20.4852 5.04766 20.3023 3.25 21.5312C1.47266 22.75 0.680469 23.3797 0.56875 23.6234C0.40625 23.9586 0 27.0055 0 30.1234C0 33.2414 0.223438 36.0445 0.223438 37.0398C0.223438 37.4562 0.223437 38.1875 0.314844 38.8883C0.375781 39.3047 0.467187 39.7109 0.629687 40.0258C0.903906 40.5844 1.15781 40.6352 2.20391 40.5844C3.54453 40.5234 5.48437 40.5844 7.48516 40.6656C8.82578 40.7164 10.1969 40.7672 11.4156 40.7977C14.4625 40.8586 13.5687 40.3508 14.8687 40.3711C16.1687 40.3914 21.2977 40.6047 25.9898 40.6047C30.682 40.6047 35.8211 40.3914 37.1109 40.3711C38.4109 40.3508 37.5172 40.8586 40.5641 40.7977C41.7828 40.7773 43.1539 40.7164 44.4945 40.6656C46.4953 40.5945 48.4453 40.5234 49.7758 40.5844C50.8219 40.6352 51.0758 40.5844 51.35 40.0258C51.5023 39.7109 51.6039 39.3047 51.6648 38.8883C51.7664 38.1875 51.7563 37.4562 51.7563 37.0398C51.7766 36.0547 52 33.2414 52 30.1234ZM8.75469 14.7469C9.24219 13.6094 10.7047 11.3242 11.4156 10.918C11.5883 10.8164 13.1016 10.3391 16.8898 10.0852C20.3734 9.85156 24.2227 9.76016 26.0102 9.76016C27.7977 9.76016 31.6469 9.85156 35.1305 10.0852C38.9086 10.3391 40.4422 10.8062 40.6047 10.918C41.5187 11.5477 42.7781 13.6094 43.2656 14.7469C43.7531 15.8844 44.4031 18.1187 44.2812 18.4234C44.1594 18.7281 44.4031 18.8805 42.7578 18.7484C41.1227 18.6266 30.8547 18.4945 26.0203 18.4945C21.1961 18.4945 10.9281 18.6266 9.28281 18.7484C7.6375 18.8703 7.88125 18.7281 7.75938 18.4234C7.61719 18.1187 8.26719 15.8945 8.75469 14.7469ZM12.4922 27.4625C11.7609 27.6453 11.3242 28.0414 10.4102 28.0312C9.49609 28.0312 7.02812 27.6148 6.5 27.5945C5.97188 27.5742 5.50469 27.95 5.23047 28.0211C4.95625 28.0922 4.41797 27.8992 3.60547 27.6453C2.79297 27.3914 2.31562 27.4625 2.05156 26.3555C1.77734 25.2586 2.05156 23.6844 2.05156 23.6844C3.80859 23.6031 5.50469 23.7656 8.68359 24.6594C11.8625 25.5531 13.6297 27.2695 13.6297 27.2695C13.6297 27.2695 13.2234 27.2797 12.4922 27.4625ZM36.3797 35.4656C34.9273 35.6586 28.8438 35.7094 26 35.7094C23.1562 35.7094 17.0727 35.6484 15.6203 35.4656C14.1375 35.2727 12.2078 33.4953 13.5383 32.0836C15.3359 30.1641 15.0008 30.225 19.0836 29.6969C22.618 29.2398 25.2992 29.2195 26 29.2195C26.6906 29.2195 29.382 29.25 32.9164 29.6969C36.9992 30.225 36.6641 30.1641 38.4617 32.0836C39.7922 33.4953 37.8625 35.2727 36.3797 35.4656ZM49.9484 26.3656C49.6742 27.4625 49.207 27.4016 48.3945 27.6555C47.582 27.9094 47.0438 28.0922 46.7695 28.0312C46.4953 27.9703 46.0281 27.5945 45.5 27.6047C44.9719 27.625 42.5039 28.0414 41.5898 28.0414C40.6758 28.0414 40.2391 27.6555 39.5078 27.4727C38.7766 27.2898 38.3703 27.2898 38.3703 27.2898C38.3703 27.2898 40.1273 25.5633 43.3164 24.6797C46.4953 23.7859 48.1914 23.6234 49.9484 23.7047C49.9484 23.6844 50.2227 25.2586 49.9484 26.3656Z" fill="white"/>
+                        </svg>
+                        {{ __('Autovoorraad') }}
                     </x-nav-link>
-                </div>
+           
+             
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('profile.edit')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mr-4" width="35" height="35" viewBox="0 0 35 35" fill="none">
+                            <path d="M35 20H20V35H15V20H0V15H15V0H20V15H35V20Z" fill="white"/>
+                        </svg>
+                        {{ __('Auto toevoegen') }}
+                    </x-nav-link>
+    
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+           
+            {{-- <form method="POST" action="{{ route('logout') }}">
+                @csrf
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
+                <x-dropdown-link :href="route('logout')"
+                        onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                    {{ __('Log Out') }}
+                </x-dropdown-link>
+            </form> --}}
+            
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
+        </div>    
     </div>
 </nav>
