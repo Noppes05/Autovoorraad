@@ -16,6 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('telefoonnummer')->nullable();
+            $table->string('plaats')->nullable();
+            $table->string('adres')->nullable();
+            $table->string('postcode')->nullable();
+            $table->string('hero_foto')->nullable();
+            $table->text('hero_beschrijving')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
