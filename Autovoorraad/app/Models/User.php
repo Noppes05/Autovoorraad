@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 #[Fillable(['name',
         'email',
         'password',
+        'logo',
         'telefoonnummer',
         'plaats',
         'adres',

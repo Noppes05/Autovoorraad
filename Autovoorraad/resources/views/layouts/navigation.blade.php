@@ -1,11 +1,11 @@
-<nav x-transition class="bg-black-pearl-950 border-r border-gray-100 fixed top-0 left-0 h-screen min-h-screen transition-all duration-300 z-50" :class="sidebarCollapsed ? 'w-min' : 'w-min'">
+<nav x-transition class="bg-black-pearl-950 border-r border-gray-100 fixed top-0 left-0 h-screen min-h-screen transition-all duration-300 z-50" :class="sidebarCollapsed ? 'w-40' : 'w-80'">
     <!-- Primary Navigation Menu -->
     
         <div x-transition :class="sidebarCollapsed ? 'px-3 sm:px-2 lg:px-1' : 'px-4 sm:px-6 lg:px-8'" class="flex flex-col justify-between w-min h-full gap-6">
                 <!-- Logo -->
                 <div class="flex items-center" :class="sidebarCollapsed ? 'justify-center p-3' : 'justify-start p-6'">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-auto w-full fill-current text-gray-200" />
+                        <img src="{{ asset(Auth::user()->logo) }}" alt="Logo" class="w-auto">
                     </a>
                 </div>
 
@@ -20,7 +20,7 @@
                     </x-nav-link>
            
              
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('profile.edit')">
+                    <x-nav-link :href="route('auto.toevoegen')" :active="request()->routeIs('auto.toevoegen')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="flex justify-center" :class="sidebarCollapsed ? '' : 'mr-4'" width="35" height="35" viewBox="0 0 35 35" fill="none">
                             <path d="M35 20H20V35H15V20H0V15H15V0H20V15H35V20Z" fill="white"/>
                         </svg>
