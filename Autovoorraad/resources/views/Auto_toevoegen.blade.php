@@ -13,7 +13,7 @@
                 </a>
             </div>
         </div>
-        <template x-if="currentStatus('basisinformatie')" x-transition>
+        <template x-if="status === 'basisinformatie'" x-transition>
             <div>
             <div class="p-4 bg-white rounded mb-4">
                 <div class="flex items-center gap-4 mb-8">
@@ -96,7 +96,7 @@
                 
             </div>
          </template>
-         <template x-if="currentStatus('foto_toevoegen')" x-transition>
+         <template x-if="status === 'foto_toevoegen'" x-transition>
             <div class="p-4">
                 <div class="w-full flex items-center justify-between mb-4">
                     <div>

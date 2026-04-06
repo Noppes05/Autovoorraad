@@ -45,9 +45,6 @@ export function add_car() {
             });
       } ,
 
-        currentStatus(status) {
-            return this.status === status;
-        },
         // Drag and Drop functies
         startDrag(index) {
             this.draggedIndex = index;
