@@ -58,7 +58,9 @@ beheren.</p>
                 <span class="ms-2 text-sm text-gray-600">{{ __('Onthoud me') }}</span>
             </label>
         </div>
-
+        <div class="">
+            <a href="{{ route("register") }}">Registreer als nieuw autobedrijf</a>
+        </div>
         <div class="mt-4">
             <x-primary-button class="">
                 {{ __('Inloggen') }}

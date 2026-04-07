@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class RdwService
 {
@@ -34,7 +35,7 @@ class RdwService
             ]);
 
             if (!$response->successful()) {
-                \Log::error('RDW API request failed', [
+                Log::error('RDW API request failed', [
                     'status' => $response->status(),
                     'kenteken' => $kenteken
                 ]);
@@ -58,7 +59,7 @@ class RdwService
             return $this->formatVehicleData($vehicleData);
 
         } catch (\Exception $e) {
-            \Log::error('RDW API exception', [
+            Log::error('RDW API exception', [
                 'message' => $e->getMessage(),
                 'kenteken' => $kenteken
             ]);
@@ -78,26 +79,8 @@ class RdwService
             'kenteken' => $data['kenteken'] ?? null,
             'merk' => $this->extractMerk($data['voertuigsoort'] ?? $data['merklijning'] ?? null),
             'model' => $data['handelsbenaming'] ?? null,
-            'voertuigsoort' => $data['voertuigsoort'] ?? null,
-            'bruto_bpm' => $data['bruto_bpm'] ?? null,
-            'netto_bpm' => $data['netto_bpm'] ?? null,
-            'europese_voertuigcategorie' => $data['europese_voertuigcategorie'] ?? null,
-            'cbi_vervaldatum' => $data['cbi_vervaldatum'] ?? null,
-            'eerst_registratie' => $data[' datum eerste registratie in nederland'] ?? $data['datum_eerste_registratie_nederland'] ?? null,
             'bouwjaar' => $this->extractBouwjaar($data[' datum eerste registratie in nederland'] ?? $data['datum_eerste_registratie_nederland'] ?? null),
             'kilometer_stand' => $data['kilometerstand'] ?? null,
-            'brandstof' => $data['brandstof_omschrijving'] ?? $data['brandstof'] ?? null,
-            'co2_uitstoot' => $data['co2_uitstoot_combined'] ?? $data['co2_uitstoot'] ?? null,
-            'kleur' => $data['externe_kleur'] ?? null,
-            'carrosserie' => $data['carrosserie'] ?? null,
-            'inrichting' => $data['inrichting'] ?? null,
-            ' massa_ledig_voertuig' => $data['massa_ledig_voertuig'] ?? null,
-            'massa_rijklaar' => $data['massa_rijklaar'] ?? null,
-            'maximum_massa_voertuig' => $data['maximum_massa_voertuig'] ?? null,
-            'wacht_op_keuring' => $data['vervaldatum_apk'] ?? null,
-            'apk_vervaldatum' => $data['vervaldatum_apk'] ?? null,
-            'diesel_roetfilter' => $data['dieselroetfilter'] ?? null,
-            'verzekering' => $data['verzekering'] ?? null,
         ];
     }
 

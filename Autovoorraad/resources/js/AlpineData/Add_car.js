@@ -9,42 +9,62 @@ export function add_car() {
         beschrijving: '',
         fotos: [],
         rdwData_error:'',
-        status:'foto_toevoegen',
+        status:'basisinformatie',
         addeditem: null,
         draggedIndex: null,
         overIndex: null,
         fileInput: null,
+        csrf_token: null,
+        async init() {
+            this.csrf_token = await fetch('/sanctum/csrf-cookie', {
+                credentials: 'include',
+            });
+        },
        handleKentekenInput() {
            this.kenteken = this.kenteken.replace(/\s/g, '').toUpperCase().replace('-','');
            this.kenteken = this.kenteken.replace(/[^A-Z0-9-]/g, '');
            console.log('Kenteken ingevoerd:', this.kenteken);
-        if (this.kenteken.trim() === '') {
-          console.warn('Kenteken is leeg. Geen gegevens op te halen.');
-          return;
-        }
-        if(this.kenteken.length < 6 || this.kenteken.length > 10) {
-            console.warn('Ongeldig kenteken formaat. Controleer de invoer.');
+            if (this.kenteken.trim() === '') {
+            console.warn('Kenteken is leeg. Geen gegevens op te halen.');
             return;
-        }
-        fetch(`https://opendata.rdw.nl/resource/m9d7-ebf2.json?kenteken=${this.kenteken.toUpperCase()}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.length);
-                if (data.length > 0) {
-                    console.log('RDW Data gevonden:', data[0]);
-                    this.merk = data[0].merk;
-                    this.model = data[0].handelsbenaming;
-                    this.bouwjaar = data[0].datum_eerste_tenaamstelling_in_nederland.substring(0, 4);
-                    this.rdwData_error = '';
-                }else{
-                    this.rdwData_error = 'Geen gegevens gevonden voor dit kenteken. Controleer de invoer.';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-      } ,
-
+            }
+            if(this.kenteken.length < 6 || this.kenteken.length > 10) {
+                console.warn('Ongeldig kenteken formaat. Controleer de invoer.');
+                return;
+            }
+            fetch(`/api/rdw/kenteken`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                   'accept': 'application/json',
+                    'X-XSRF-TOKEN': decodeURIComponent(this.getCookie('XSRF-TOKEN'))
+                },
+                body: JSON.stringify({ kenteken: this.kenteken })}
+                )
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.length);
+                    if (data.length > 0) {
+                        console.log('RDW Data gevonden:', data[0]);
+                        this.merk = data[0].merk;
+                        this.model = data[0].handelsbenaming;
+                        this.bouwjaar = data[0].datum_eerste_tenaamstelling_in_nederland.substring(0, 4);
+                        this.rdwData_error = '';
+                    }else{
+                        this.rdwData_error = 'Geen gegevens gevonden voor dit kenteken. Controleer de invoer.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        } ,
+        getCookie(name) {
+            return document.cookie
+                .split('; ')
+                .find(row => row.startsWith(name + '='))
+                ?.split('=')[1];
+    },
         // Drag and Drop functies
         startDrag(index) {
             this.draggedIndex = index;

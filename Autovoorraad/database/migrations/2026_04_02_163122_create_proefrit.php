@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('proefrit', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('auto_id')->constrained()->cascadeOnDelete();
+            $table->uuid("id")->primary();
+            $table->foreignUuid('auto_id')->constrained()->cascadeOnDelete();
             $table->string('naam');
             $table->string('email');
             $table->string('telefoonnummer');

@@ -101,13 +101,11 @@
                 <div class="w-full flex items-center justify-between mb-4">
                     <div>
                         <h1 class="text-4xl font-serif font-bold text-gray-800">Foto's beheren</h1>
-                        <p class="text-md">Voeg een nieuw voertuig toe aan de digitale showroom.</p>
+                        <p class="text-md">Voeg foto’s toe voor de auto</p>
                     </div>
                     <div class="flex">
-                        <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 border border-black-pearl-950 hover:bg-black-pearl-950 hover:text-white rounded-md font-semibold text-xs text-black-pearl-950 uppercase tracking-widest  focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                            Terug naar basisinformatie
-                        <a href="{{ route('dashboard') }}" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                            Opslaan foto's
+                        <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
+                            Opslaan foto's en terug naar overzicht
                         </a>
                     </div>
                 </div>
@@ -131,7 +129,7 @@
                             </div>
                         </div>
                     </template>
-                    <div x-on:click="OpenFotoKiezen()" class="w-1/5 h-48 rounded bg-black-pearl-950 border border-blaze-orange-600 text-blaze-orange-600 flex justify-center items-center">+
+                    <div x-on:click="OpenFotoKiezen()" class="w-1/5 h-48 rounded bg-black-pearl-950 border cursor-pointer border-blaze-orange-600 text-blaze-orange-600 flex justify-center items-center">+
                     <input type="file" accept="image/*" multiple  @change="AddFoto" hidden id="fileinput" x-model='fileInput'></div>
                 </div>
             </div>
