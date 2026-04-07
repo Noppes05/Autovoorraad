@@ -7,8 +7,7 @@
             <img class="object cover w-full h-full" src="{{ asset('img/Autovoorraad/logo.png') }}" alt="">
         </div>
         <h2 class="text-2xl font-semibold">Welkom terug</h2>
-        <p class="text-gray-500 mb-6">Log in op uw dealer dashboard om uw voorraad te
-beheren.</p>
+        <p class="text-gray-500 mb-6">Log in op uw dealer dashboard om uw voorraad te beheren.</p>
         <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -80,5 +79,4 @@ beheren.</p>
         
     </div>
 
-    
 </x-guest-layout>
