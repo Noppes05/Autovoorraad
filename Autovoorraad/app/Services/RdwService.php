@@ -10,7 +10,7 @@ class RdwService
     /**
      * The base URL for the RDW Open Data API.
      */
-    protected string $baseUrl = 'https://opendata.rdw.nl/api/views/m9d7-ewf7/rows.json';
+    protected string $baseUrl = 'https://opendata.rdw.nl/resource/m9d7-ebf2.json';
 
     /**
      * Fetch vehicle data from RDW API by license plate.
@@ -30,8 +30,7 @@ class RdwService
 
         try {
             $response = Http::get($this->baseUrl, [
-                'where' => "kenteken in ('{$kenteken}')",
-                'opentable' => 'true'
+                'kenteken' => "'{$kenteken}'",
             ]);
 
             if (!$response->successful()) {
@@ -43,20 +42,13 @@ class RdwService
             }
 
             $data = $response->json();
-
             // Check if we have data
-            if (empty($data['data']) || empty($data['data'][0])) {
+            if (empty($data[0])) {
                 return null;
             }
 
-            // The API returns an array of fields, we need to map them by column names
-            $columns = array_column($data['columns'], 'name');
-            $firstRow = $data['data'][0];
 
-            // Combine column names with row data
-            $vehicleData = array_combine($columns, $firstRow);
-
-            return $this->formatVehicleData($vehicleData);
+            return $this->formatVehicleData($data[0]);
 
         } catch (\Exception $e) {
             Log::error('RDW API exception', [
@@ -77,9 +69,9 @@ class RdwService
     {
         return [
             'kenteken' => $data['kenteken'] ?? null,
-            'merk' => $this->extractMerk($data['voertuigsoort'] ?? $data['merklijning'] ?? null),
+            'merk' => $this->extractMerk($data['merk'] ?? null),
             'model' => $data['handelsbenaming'] ?? null,
-            'bouwjaar' => $this->extractBouwjaar($data[' datum eerste registratie in nederland'] ?? $data['datum_eerste_registratie_nederland'] ?? null),
+            'bouwjaar' => $this->extractBouwjaar($data['datum_eerste_tenaamstelling_in_nederland'] ?? null),
             'kilometer_stand' => $data['kilometerstand'] ?? null,
         ];
     }

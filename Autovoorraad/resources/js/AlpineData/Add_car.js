@@ -44,12 +44,15 @@ export function add_car() {
                 )
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.length);
-                    if (data.length > 0) {
-                        console.log('RDW Data gevonden:', data[0]);
-                        this.merk = data[0].merk;
-                        this.model = data[0].handelsbenaming;
-                        this.bouwjaar = data[0].datum_eerste_tenaamstelling_in_nederland.substring(0, 4);
+                    console.log(data['data']);
+                    if (data['data'] !={}) {
+                        console.log('RDW Data gevonden:', data['data']);
+                        this.merk = data['data']["merk"];
+                        this.model = data['data']["model"];
+                        this.bouwjaar = data['data']["bouwjaar"];
+                        if(data['data']["kilometer_stand"] != null){
+                            this.km_stand = data['data']["kilometer_stand"];
+                        }
                         this.rdwData_error = '';
                     }else{
                         this.rdwData_error = 'Geen gegevens gevonden voor dit kenteken. Controleer de invoer.';
