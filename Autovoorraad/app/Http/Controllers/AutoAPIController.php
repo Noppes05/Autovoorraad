@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Auto_status;
+use App\Enums\Auto_status;
 use App\Models\auto;
+use App\Models\Auto as ModelsAuto;
+use App\Models\AutoFoto;
 use Illuminate\Http\Request;
 
 class AutoAPIController extends Controller
@@ -29,10 +31,10 @@ class AutoAPIController extends Controller
             'beschrijving'=> 'nullable|string',
             'prijs'=>'nullable|numeric',
             'km_stand'=>'nullable|integer',
-            'fotos'=> 'nullable|array',
+            'fotos.*'=> 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    try{
-        $auto = Auto::create([
+        try{
+            $auto = Auto::create([
             'user_id' => $request->user()->id,
             'kenteken' => $request->input('kenteken'),
             'merk' => $request->input('merk'),
@@ -42,7 +44,22 @@ class AutoAPIController extends Controller
             'prijs' => $request->input('prijs'),
             'km_stand' => $request->input('km_stand'),
             'status'=> Auto_status::BESCHIKBAAR,
-        ]);
+            ]);
+            if ($request->has('fotos')) {
+                $i = 1;
+                $fotos = $request->file('fotos');
+               
+                foreach ($fotos as $foto) {
+                    
+                    $path = $foto->store('uploads', 'public');
+                    $autofoto= AutoFoto::create([
+                        'auto_id' => $auto->id,
+                        'foto_path' => $path,
+                        'volgorde_nummer' => $i,
+                        ]);
+                    $i++;
+                }
+            }
     }
     catch(\Exception $e){
         return response()->json(['message' => 'Fout bij het toevoegen van de auto: ' . $e->getMessage()], 500);

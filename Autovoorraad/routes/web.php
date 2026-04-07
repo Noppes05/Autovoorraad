@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AutoAPIController;
 use App\Http\Controllers\AutoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Container\Attributes\Auth;
@@ -18,7 +19,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
 Route::get('/auto-toevoegen', [AutoController::class, 'AutoToevoegen'])->middleware(['auth', 'verified'])->name('auto.toevoegen');
+Route::post('/api/rdw/kenteken', [AutoController::class, 'fetchFromRdw'])->middleware(['auth:sanctum'])->name('rdw.kenteken');
+Route::middleware('auth:sanctum','throttle:15,1')->post('/api/Addcar', [AutoAPIController::class, 'store'])->name('api.addcar');
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

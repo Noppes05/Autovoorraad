@@ -114,12 +114,43 @@ export function add_car() {
             for (let i = 0; i < files.length; i++) {
                 console.log('Bestand toegevoegd:', fileinput.files[i].name);
                 const file = fileinput.files[i];
-                this.fotos.push({
-                    name: file.name,
-                    url: URL.createObjectURL(file)
-                })
+                this.fotos.push(file)
                 console.log('Huidige foto', this.fotos);
             }
+        },
+
+        async submitCar() {
+            console.log(this.fotos);
+            const formdata = new FormData();
+            formdata.append('kenteken', this.kenteken);
+            formdata.append('merk', this.merk);
+            formdata.append('model', this.model);
+            formdata.append('bouwjaar', this.bouwjaar);
+            formdata.append('km_stand', this.km_stand);
+            formdata.append('prijs', this.prijs);
+            formdata.append('beschrijving', this.beschrijving);
+            this.fotos.forEach((foto, index) => {
+                formdata.append(`fotos[${index}]`, foto);
+            });
+            
+            console.log('Te verzenden gegevens:', formdata);
+                try {
+                    const response = await fetch('/api/Addcar', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'X-XSRF-TOKEN': decodeURIComponent(this.getCookie('XSRF-TOKEN'))
+                        },
+                        body: formdata,
+                    },
+                        
+                    );
+                    const data = await response.json();
+                    console.log('Response van server:', data);
         }
+        catch (error) { 
+                       console.error('Fout bij verzenden:', error);
+        }
+    }
     }
 }

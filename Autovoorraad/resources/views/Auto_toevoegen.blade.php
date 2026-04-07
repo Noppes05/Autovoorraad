@@ -7,8 +7,8 @@
             </div>
             <div class="flex">
                 <a href="{{ route('dashboard') }}" class="ml-4 inline-flex items-center px-4 py-3 border border-black-pearl-950 hover:bg-black-pearl-950 hover:text-white rounded-md font-semibold text-xs text-black-pearl-950 uppercase tracking-widest  focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                    Concept Opslaan
-                <a href="{{ route('dashboard') }}" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
+                    Concept Opslaan</a>
+                <a x-on:click="submitCar()" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
                     Opslaan & Publiceren
                 </a>
             </div>
@@ -66,7 +66,7 @@
                         <div class="bg-blaze-orange-600 rounded-full w-1.5 h-8 inline-block"></div>
                         <h2 class=" text-2xl font-semibold font-serif inline leading-none">Voertuig omschrijving</h2>
                 </div>
-                <textarea tabindex="7" class="w-full h-40 rounded bg-gray-100 p-4 text-sm  text-gray-800 outline-none placeholder:font-semibold" placeholder="Voeg hier een omschrijving van het voertuig toe. Denk aan details zoals onderhoudsgeschiedenis, unieke kenmerken, of andere relevante informatie die potentiële kopers zou kunnen interesseren."></textarea>
+                <textarea x-model="beschrijving" tabindex="7" class="w-full h-40 rounded bg-gray-100 p-4 text-sm  text-gray-800 outline-none placeholder:font-semibold" placeholder="Voeg hier een omschrijving van het voertuig toe. Denk aan details zoals onderhoudsgeschiedenis, unieke kenmerken, of andere relevante informatie die potentiële kopers zou kunnen interesseren."></textarea>
             </div>
 
             <div class="p-4 bg-white rounded">
@@ -89,7 +89,7 @@
                     <template x-for="(foto, index) in fotos" :key="index">
                         <div 
                              class="relative rounded bg-gray-100 h-48 w-1/5 flex items-center justify-center">
-                            <img :src="foto.url" :alt="foto.name" class="object-cover h-full w-full rounded">
+                            <img :src="URL.createObjectURL(foto)" :alt="foto.name" class="object-cover h-full w-full rounded">
                         </div>
                     </template>
                 </div>
@@ -121,7 +121,7 @@
                                     'border-l-2 border-blaze-orange-600': overIndex === index
                                 }"
                              class="relative rounded group bg-gray-100 h-48 w-1/5 flex items-center overflow-hidden justify-center">
-                            <img :src="foto.url" :alt="foto.name" class="object-cover group-hover:scale-110 h-full w-full rounded transition-all duration-150">
+                            <img :src="URL.createObjectURL(foto)" :alt="foto.name" class="object-cover group-hover:scale-110 h-full w-full rounded transition-all duration-150">
                             <div class="absolute hidden  bg-black/30 z-10 top-0 left-0 group-hover:flex transition-all justify-center items-center w-full h-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="cursor-pointer" x-on:click="deletePicture(index)" width="52" height="52" viewBox="0 0 52 52" fill="none">
                                     <path d="M41.1668 8.66667H33.5835L31.4168 6.5H20.5835L18.4168 8.66667H10.8335V13H41.1668M13.0002 41.1667C13.0002 42.3159 13.4567 43.4181 14.2694 44.2308C15.082 45.0435 16.1842 45.5 17.3335 45.5H34.6668C35.8161 45.5 36.9183 45.0435 37.731 44.2308C38.5436 43.4181 39.0002 42.3159 39.0002 41.1667V15.1667H13.0002V41.1667Z" fill="#FC6A00"/>
