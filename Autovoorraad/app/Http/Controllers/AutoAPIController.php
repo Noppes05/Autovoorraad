@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Auto_status;
 use App\Models\auto;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,34 @@ class AutoAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kenteken' => 'required|string|max:255',
+            'merk' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'bouwjaar' => 'required|integer',
+            'beschrijving'=> 'nullable|string',
+            'prijs'=>'nullable|numeric',
+            'km_stand'=>'nullable|integer',
+            'fotos'=> 'nullable|array',
+        ]);
+    try{
+        $auto = Auto::create([
+            'user_id' => $request->user()->id,
+            'kenteken' => $request->input('kenteken'),
+            'merk' => $request->input('merk'),
+            'model' => $request->input('model'),
+            'bouwjaar' => $request->input('bouwjaar'),
+            'beschrijving' => $request->input('beschrijving'),
+            'prijs' => $request->input('prijs'),
+            'km_stand' => $request->input('km_stand'),
+            'status'=> Auto_status::BESCHIKBAAR,
+        ]);
+    }
+    catch(\Exception $e){
+        return response()->json(['message' => 'Fout bij het toevoegen van de auto: ' . $e->getMessage()], 500);
+    }
+
+        return response()->json(['message' => 'Auto succesvol toegevoegd', 'auto_id' => $auto->id], 201);
     }
 
     /**
