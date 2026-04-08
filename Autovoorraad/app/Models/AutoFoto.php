@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable([
+
+class AutoFoto extends Model
+{
+    use HasUuids;
+     protected $table = 'auto_fotos';
+    protected $fillable = [
         'auto_id',
         'foto_path',
         'volgorde_nummer',
-    ])]
-class AutoFoto extends Model
-{
-     protected $table = 'auto_fotos';
+    ];
 
      public function auto()
     {

@@ -3,8 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-#[Fillable(['user_id',
+class Auto extends Model
+{
+    use HasUuids;
+    protected $fillable = [
+        'user_id',
         'merk',
         'model',
         'kenteken',
@@ -12,9 +17,8 @@ use Illuminate\Database\Eloquent\Model;
         'km_stand',
         'bouwjaar',
         'beschrijving',
-        'status',])]
-class Auto extends Model
-{
+        'status',
+    ];
       public function bedrijf()
     {
         return $this->belongsTo(User::class, 'user_id');

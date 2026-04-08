@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('auto_fotos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('auto_id')->constrained()->cascadeOnDelete();
+            $table->uuid("id")->primary();
+            $table->foreignUuid('auto_id')->constrained()->cascadeOnDelete();
             $table->string('foto_path');
             $table->integer('volgorde_nummer');
             $table->timestamps();
