@@ -17,7 +17,7 @@ class AutoAPIController extends Controller
      */
     public function index()
     {
-        //
+        return Auto::where('user_id', request()->user()->id)->with('fotos')->get();
     }
 
     /**

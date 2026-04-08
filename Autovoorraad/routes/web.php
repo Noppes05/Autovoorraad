@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum','throttle:15,1')->group(function() {
     Route::post('/api/rdw/kenteken', [AutoController::class, 'fetchFromRdw'])->name('rdw.kenteken');
     Route::post('/api/AddConceptcar', [AutoAPIController::class, 'store_concept'])->name('api.addconceptcar');
     Route::post('/api/Addcar', [AutoAPIController::class, 'store_beschikbaar'])->name('api.addcar');
+    Route::get('api/autos', [AutoAPIController::class, 'index'])->name('api.autos');
 });
 
 
