@@ -22,8 +22,12 @@ Route::get('/dashboard', function () {
 
 
 Route::get('/auto-toevoegen', [AutoController::class, 'AutoToevoegen'])->middleware(['auth', 'verified'])->name('auto.toevoegen');
-Route::post('/api/rdw/kenteken', [AutoController::class, 'fetchFromRdw'])->middleware(['auth:sanctum'])->name('rdw.kenteken');
-Route::middleware('auth:sanctum','throttle:15,1')->post('/api/Addcar', [AutoAPIController::class, 'store'])->name('api.addcar');
+
+Route::middleware('auth:sanctum','throttle:15,1')->group(function() {
+    Route::post('/api/rdw/kenteken', [AutoController::class, 'fetchFromRdw'])->name('rdw.kenteken');
+    Route::post('/api/AddConceptcar', [AutoAPIController::class, 'store_concept'])->name('api.addconceptcar');
+    Route::post('/api/Addcar', [AutoAPIController::class, 'store_beschikbaar'])->name('api.addcar');
+});
 
 
 

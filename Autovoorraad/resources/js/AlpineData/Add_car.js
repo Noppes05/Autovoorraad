@@ -118,8 +118,14 @@ export function add_car() {
                 console.log('Huidige foto', this.fotos);
             }
         },
+        async submitConceptCar() {
+            await this.submitCar('/api/AddConceptcar');
+        },
+        async submitBeschikbaarCar() {
+            await this.submitCar('/api/Addcar');
+        },
 
-        async submitCar() {
+        async submitCar(url) {
             console.log(this.fotos);
             const formdata = new FormData();
             formdata.append('kenteken', this.kenteken);
@@ -135,7 +141,7 @@ export function add_car() {
             
             console.log('Te verzenden gegevens:', formdata);
                 try {
-                    const response = await fetch('/api/Addcar', {
+                    const response = await fetch(url, {
                         method: 'POST',
                         credentials: 'include',
                         headers: {
