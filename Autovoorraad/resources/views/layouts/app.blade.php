@@ -21,11 +21,20 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="antialiased ">
-        <div x-data="{ sidebarCollapsed: false }" class="min-h-screen bg-gray-100 flex">
+        <div x-data="{ sidebarCollapsed: false,
+        init() {
+            const media = window.matchMedia('(min-width: 768px)')
+
+            this.sidebarCollapsed = !media.matches
+
+            media.addEventListener('change', (e) => {
+                this.sidebarCollapsed = e.matches
+            })
+        } }" class="min-h-screen bg-gray-100 flex">
             @include('layouts.navigation')
             <x-toast />
             <!-- Page Content -->
-            <main class="flex-1 pt-8 min-h-screen" :class="sidebarCollapsed ? 'ml-30' : 'ml-70'">
+            <main class="flex-1 pt-8 min-h-screen" :class="sidebarCollapsed ? 'ml-20' : 'ml-60'">
                 {{ $slot }}
             </main>
         </div>

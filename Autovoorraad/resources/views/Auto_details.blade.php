@@ -11,18 +11,18 @@
     $created_at = \Carbon\Carbon::parse($auto->created_at);
     $dagen_in_voorraad = round($created_at->diffInDays($now)*100);
     @endphp
-<div class="p-10">
-    <div class="flex justify-between mb-8">
+<div class=" w-full p-4 md:p-10">
+    <div class="flex flex-col md:flex-row justify-between mb-8">
         <h1 class="text-3xl font-serif tracking-tight font-bold mb-6">{{ $auto->merk }} {{$auto->model}}</h1>
-        <div class="h-full my-auto flex gap-6 items-center justify-end"">
+        <div class="h-full my-auto flex md:flex-row flex-col gap-6 items-center justify-end"">
                             <!-- Voeg hier actieknoppen toe, zoals bewerken of verwijderen -->
-                            <button @click.stop x-on:click="deleteCar(auto)" class="bg-[#E67272] cursor-pointer flex justify-between items-center gap-5 hover:bg-black-pearl-800 transition text-black-pearl-950 font-semibold p-2 px-6 rounded-lg">
+                            <button @click.stop x-on:click="deleteCar(auto)" class="bg-[#E67272] cursor-pointer flex justify-between items-center gap-5 hover:bg-black-pearl-800 transition text-black-pearl-950 font-semibold p-2 md:px-6 rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 12 14" fill="none">
                                     <path d="M2.25 13.5C1.8375 13.5 1.48438 13.3531 1.19062 13.0594C0.896875 12.7656 0.75 12.4125 0.75 12V2.25H0V0.75H3.75V0H8.25V0.75H12V2.25H11.25V12C11.25 12.4125 11.1031 12.7656 10.8094 13.0594C10.5156 13.3531 10.1625 13.5 9.75 13.5H2.25ZM9.75 2.25H2.25V12H9.75V2.25ZM3.75 10.5H5.25V3.75H3.75V10.5ZM6.75 10.5H8.25V3.75H6.75V10.5ZM2.25 2.25V12V2.25Z" fill="currentcolor"/>
                                 </svg>
                                 Verwijderen
                             </button>
-                            <button @click.stop x-on:click="alert('Clicked update')" class="bg-black-pearl-700 cursor-pointer  hover:bg-black-pearl-800 flex justify-between items-center gap-5 transition text-white font-semibold p-2 px-6 rounded-lg">
+                            <button @click.stop x-on:click="alert('Clicked update')" class="bg-black-pearl-700 cursor-pointer  hover:bg-black-pearl-800 flex justify-between items-center gap-5 transition text-white font-semibold p-2 md:px-6 rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                                  <path d="M1.5 12H2.56875L9.9 4.66875L8.83125 3.6L1.5 10.9312V12ZM0 13.5V10.3125L9.9 0.43125C10.05 0.29375 10.2156 0.1875 10.3969 0.1125C10.5781 0.0375 10.7688 0 10.9688 0C11.1687 0 11.3625 0.0375 11.55 0.1125C11.7375 0.1875 11.9 0.3 12.0375 0.45L13.0688 1.5C13.2188 1.6375 13.3281 1.8 13.3969 1.9875C13.4656 2.175 13.5 2.3625 13.5 2.55C13.5 2.75 13.4656 2.94062 13.3969 3.12188C13.3281 3.30313 13.2188 3.46875 13.0688 3.61875L3.1875 13.5H0ZM12 2.55L10.95 1.5L12 2.55ZM9.35625 4.14375L8.83125 3.6L9.9 4.66875L9.35625 4.14375Z" fill="currentcolor"/>
                                 </svg>
@@ -30,20 +30,20 @@
                             </button>
                         </div>
     </div>
-    <div class="grid grid-cols-3 grid-rows-1 gap-10 h-full w-full">
-        <div class="col-span-2">
-            <div class="grid gap-4 grid-cols-4 grid-rows-2">
-                <div class="h-full bg-white row-span-2 col-span-3 rounded-xl">
+    <div class="grid grid-cols-1 grid-rows-2  md:grid-cols-3 md:grid-rows-1 gap-10 h-full w-full">
+        <div class="md:col-span-2">
+            <div class="grid gap-4 grid-cols-2 grid-rows-2  md:grid-cols-4 md:grid-rows-2">
+                <div class="h-min md:h-full bg-white row-span-3  md:row-span-2 col-span-2 md:col-span-3 rounded-xl">
                     <img src="{{ $auto->fotos->first() ? asset('storage/' . $auto->fotos->first()->foto_path) : 'https://placehold.net/600x400.png' }}" alt="Auto Foto" class="object-cover w-full h-full rounded-xl">
                 </div>
-                <div class=" bg-white h-50 rounded-2xl">
+                <div class=" bg-white h-min md:h-50 rounded-2xl">
                     <img src="{{ $auto->fotos->count() > 1 ? asset('storage/' . $auto->fotos[2]->foto_path) : 'https://placehold.net/600x400.png' }}" alt="Auto Foto" class="object-cover w-full h-full rounded-xl">
                 </div>
-                <div class="bg-white h-50 rounded-2xl">
+                <div class="bg-white h-min md:h-50 rounded-2xl">
                     <img src="{{ $auto->fotos->count() > 2 ? asset('storage/' . $auto->fotos[3]->foto_path) : 'https://placehold.net/600x400.png' }}" alt="Auto Foto" class="object-cover w-full h-full rounded-xl">
                 </div>
             </div>
-            <div class="grid grid-cols-3 mt-10 grid-rows-1 gap-10">
+            <div class="grid md:grid-cols-3 grid-rows-3 mt-10 md:grid-rows-1 gap-10">
                 <div class="bg-white rounded-xl h-30 p-4 flex flex-col gap-2">
                         <p class="text-[0.7rem] font-semibold uppercase tracking-widest font-sans text-[#2B4963]">Prijs</p>
                         <h3 class="text-xl font-bold tracking-tight font-serif">€ {{ $auto->prijs ? number_format($auto->prijs, 0, ',', '.') : 'N/A' }}</h3>      
@@ -63,7 +63,7 @@
         </div>
         <div class="h-full flex flex-col w-full">
             <div class="bg-white h-full flex flex-col gap-4  w-full relative shadow rounded-2xl p-6">
-                <p  class="before:bg-green-500 mb-3 before:h-2 uppercase before:w-2 before:rounded-full before:content-[''] before:inline-block before:mr-4 {{ $status_class }}t-bold tracking-tight font-sans text-[#2B4963]">Status van Auto: <b>{{$auto->status}}</b></p>
+                <p  class="mb-3 before:h-2 uppercase before:w-2 before:rounded-full before:content-[''] before:inline-block before:mr-4 {{ $status_class }} tracking-tight font-sans text-[#2B4963]">Status van Auto: <b>{{$auto->status}}</b></p>
                 <p class="font-sans uppercase font-light text-sm">dagen in voorraad</p>
                 <h3 class="text-5xl mb-3 tracking-wider font-semibold">{{ $dagen_in_voorraad}}</h3>
                 <div class="bg-yellow-400 p-1 rounded text-center">

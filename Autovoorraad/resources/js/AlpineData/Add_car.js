@@ -127,14 +127,37 @@ export function add_car() {
             toast.success(`${files.length} foto(s) toegevoegd`);
         },
         async submitConceptCar() {
-            await this.submitCar('/api/AddConceptcar');
-            this.isConceptSaved = true;
-            toast.success('Concept auto succesvol opgeslagen');
+            try{
+                const response = await this.submitCar('/api/AddConceptcar');
+                console.log('Response status:', response);
+                if(response === 201){
+
+                this.isConceptSaved = true;
+                toast.success('Concept auto succesvol opgeslagen');
+                } else {
+                this.isConceptSaved = false;
+                toast.error('Fout bij het opslaan van de concept auto');
+                }
+            }
+                catch (error) {
+                    console.error('Fout bij opslaan concept auto:', error);
+                }
+                    
         },
         async submitBeschikbaarCar() {
-            await this.submitCar('/api/Addcar');
-              this.isPublished = true;
-              toast.success('Auto succesvol gepubliceerd');
+            try{
+                const response = await this.submitCar('/api/Addcar');
+                if(response === 201){
+                    toast.success('Auto succesvol gepubliceerd');
+                    this.isPublished = true;
+                } else {
+                    toast.error('Fout bij het publiceren van de auto');
+                    this.isPublished = false;
+                }
+            }
+            catch (error) {
+                console.error('Fout bij publiceren auto:', error);
+            }
         },
 
         async submitCar(url) {
@@ -164,10 +187,11 @@ export function add_car() {
                         
                     );
                     if (!response.ok) {
-                        throw new Error(`Netwerkfout: ${response.statusText}`);
+                        toast.error('Fout bij het opslaan van de auto');
+                        return response.status;
                     }
                     const data = await response.json();
-                    console.log('Response van server:', data);
+                    return response.status;
         }
         catch (error) { 
                        console.error('Fout bij verzenden:', error);

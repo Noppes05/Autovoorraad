@@ -74,7 +74,7 @@ class AutoAPIController extends Controller
                     $this->store_auto_fotos($possibleauto, $fotos);
             }
 
-            return response()->json(['message' => 'Auto succesvol bijgewerkt', 'auto_id' => $possibleauto->id], 200);
+            return response()->json(['message' => 'Auto succesvol bijgewerkt', 'auto_id' => $possibleauto->id], 201);
         }
            $auto = $this->store_car($request, Auto_status::BESCHIKBAAR);
         }
