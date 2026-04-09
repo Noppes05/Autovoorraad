@@ -49,7 +49,7 @@ export function add_car() {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data['data']);
-                    if (data['data'] !={}) {
+                    if (data['data'] !=undefined) {
                         console.log('RDW Data gevonden:', data['data']);
                         this.merk = data['data']["merk"];
                         this.model = data['data']["model"];

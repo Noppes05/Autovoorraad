@@ -8,14 +8,14 @@
             <div class="flex">
                 <a x-on:click="submitConceptCar()" class="ml-4 inline-flex items-center px-4 py-3 border border-black-pearl-950 hover:bg-black-pearl-950 hover:text-white rounded-md font-semibold text-xs text-black-pearl-950 uppercase tracking-widest  focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
                     Concept Opslaan</a>
-                    <template x-transition x-if="this.isConceptSaved">
+                    <template x-transition x-if="isConceptSaved">
                          <svg class="w-5 h-5 text-green-400 shrink-0 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
                     </template>
                 <a x-on:click="submitBeschikbaarCar()" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
                     Opslaan & Publiceren
-                    <template x-transition x-if="this.isPublished">
+                    <template x-transition x-if="isPublished">
                          <svg class="w-5 h-5 text-fg-success shrink-0 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
@@ -60,19 +60,19 @@
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">bouwjaar</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm  text-gray-800">
-                            <input type="text" tabindex="4" x-model="bouwjaar" class="outline-none w-full placeholder:font-semibold" placeholder="2021, 2020, etc.">
+                            <input type="number" tabindex="4" x-model="bouwjaar" class="outline-none w-full placeholder:font-semibold" placeholder="2021, 2020, etc.">
                         </div>
                     </div>
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">prijs (€)</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm  text-gray-800">
-                            <input type="text" tabindex="5" x-model="prijs" class="outline-none w-full placeholder:font-semibold" placeholder="0,00">
+                            <input type="number" tabindex="5" x-model="prijs" class="outline-none w-full placeholder:font-semibold" placeholder="0,00">
                         </div>
                     </div>
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">km stand</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm  text-gray-800">
-                            <input type="text" tabindex="6" x-model="km_stand" class="outline-none w-full placeholder:font-semibold" placeholder="0 km">
+                            <input type="number" tabindex="6" x-model="km_stand" class="outline-none w-full placeholder:font-semibold" placeholder="0 km">
                         </div>
                     </div>
                 </div>

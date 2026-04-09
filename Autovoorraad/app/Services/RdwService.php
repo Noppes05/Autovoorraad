@@ -46,7 +46,6 @@ class RdwService
             if (empty($data[0])) {
                 return null;
             }
-            dd($data[0]);
 
             return $this->formatVehicleData($data[0]);
 

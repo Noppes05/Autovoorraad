@@ -23,11 +23,12 @@ Route::get('/dashboard', function () {
 
 Route::get('/auto-toevoegen', [AutoController::class, 'AutoToevoegen'])->middleware(['auth', 'verified'])->name('auto.toevoegen');
 
-Route::middleware('auth:sanctum','throttle:15,1')->group(function() {
+Route::middleware('auth:sanctum','throttle:30,1')->group(function() {
     Route::post('/api/rdw/kenteken', [AutoController::class, 'fetchFromRdw'])->name('rdw.kenteken');
     Route::post('/api/AddConceptcar', [AutoAPIController::class, 'store_concept'])->name('api.addconceptcar');
     Route::post('/api/Addcar', [AutoAPIController::class, 'store_beschikbaar'])->name('api.addcar');
     Route::get('api/autos', [AutoAPIController::class, 'index'])->name('api.autos');
+    Route::post('/api/autos/delete/', [AutoAPIController::class, 'destroy'])->name('api.autos.delete');
 });
 
 

@@ -66,20 +66,12 @@ class AutoAPIController extends Controller
                 'status'=> Auto_status::BESCHIKBAAR,
             ]);
             if ($request->has('fotos')) {
+                    //delete old photos
+                    $this->delete_auto_fotos($possibleauto);
 
-                //delete old foto's
-                $possibleauto_fotos = AutoFoto::where('auto_id', $possibleauto->id)->get();
-                if($possibleauto_fotos){
-                    foreach ($possibleauto_fotos as $foto) {
-                        //delete de foto van de schijf
-                        Storage::disk('public')->delete($foto->foto_path);
-                        $foto->delete();
-                    }
-                }
-
-                //add the new photos
-                $fotos = $request->file('fotos');
-                $this->store_auto_fotos($possibleauto, $fotos);
+                    //add the new photos
+                    $fotos = $request->file('fotos');
+                    $this->store_auto_fotos($possibleauto, $fotos);
             }
 
             return response()->json(['message' => 'Auto succesvol bijgewerkt', 'auto_id' => $possibleauto->id], 200);
@@ -96,6 +88,10 @@ class AutoAPIController extends Controller
             return response()->json(['message' => 'Auto succesvol toegevoegd', 'auto_id' => $auto->id], 201);
     }
 
+
+    /**
+     * Store a newly created resource in storage.
+     */
     private function store_car(Request $request, Auto_status $status){
          $request->validate([
             'kenteken' => 'required|string|max:255',
@@ -139,6 +135,10 @@ class AutoAPIController extends Controller
             return $auto;
     }
 
+
+    /**
+     * Store the photos for the car
+     */
     private function store_auto_fotos($auto, $fotos){
         $i = 1;
         foreach ($fotos as $foto) {
@@ -152,6 +152,20 @@ class AutoAPIController extends Controller
         }
     }
 
+    /**
+     * delete fotos of the car
+     */
+
+    private function delete_auto_fotos($auto){
+        $auto_fotos = AutoFoto::where('auto_id', $auto->id)->get();
+        if($auto_fotos){
+            foreach ($auto_fotos as $foto) {
+                //delete de foto van de schijf
+                Storage::disk('public')->delete($foto->foto_path);
+                $foto->delete();
+            }
+        }
+    }
     /**
      * Display the specified resource.
      */
@@ -171,8 +185,21 @@ class AutoAPIController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(auto $auto)
+    public function destroy(Request $request)
     {
-        //
+        
+        
+        $carId = $request->input('car')['id'];
+        $car = Auto::where('id', $carId)->where('user_id', $request->user()->id)->first();
+        if (!$car) {
+            return response()->json(['message' => 'Auto niet gevonden of je hebt geen toestemming om deze auto te verwijderen'], 404);
+        }
+        try {
+            $this->delete_auto_fotos($car);
+            $car->delete();
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Fout bij het verwijderen van de auto: ' . $e->getMessage()], 500);
+        }
+        return response()->json(['message' => 'Auto succesvol verwijderd'], 200);
     }
 }
