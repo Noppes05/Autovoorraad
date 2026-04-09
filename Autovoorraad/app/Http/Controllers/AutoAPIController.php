@@ -54,7 +54,7 @@ class AutoAPIController extends Controller
                 'beschrijving'=> 'nullable|string',
                 'prijs'=>'nullable|numeric',
                 'km_stand'=>'nullable|integer',
-                'fotos.*'=> 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                'fotos.*'=> 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
             ]);
             $possibleauto->update([
                 'merk' => $request->input('merk'),
@@ -105,7 +105,7 @@ class AutoAPIController extends Controller
             'beschrijving'=> 'nullable|string',
             'prijs'=>'nullable|numeric',
             'km_stand'=>'nullable|integer',
-            'fotos.*'=> 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'fotos.*'=> 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
         ]);
         $existingAuto = ModelsAuto::where('kenteken', $request->input('kenteken'))
         ->where('user_id',$request->user()->id)
@@ -127,7 +127,14 @@ class AutoAPIController extends Controller
             ]);
             if ($request->has('fotos')) {
                 $fotos = $request->file('fotos');
+                try{
                 $this->store_auto_fotos($auto, $fotos);
+                }
+                catch(\Exception $e){
+                    //delete the auto if there was an error uploading the photos
+                    $auto->delete();
+                    throw new UnprocessableEntityHttpException("Fout bij het uploaden van de foto's: " . $e->getMessage());
+                }
             }
             return $auto;
     }

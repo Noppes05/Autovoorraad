@@ -15,6 +15,9 @@ export function add_car() {
         overIndex: null,
         fileInput: null,
         csrf_token: null,
+        isPublished: false,
+        rdwData_loading: false,
+        isConceptSaved: false,
         async init() {
             this.csrf_token = await fetch('/sanctum/csrf-cookie', {
                 credentials: 'include',
@@ -32,6 +35,7 @@ export function add_car() {
                 console.warn('Ongeldig kenteken formaat. Controleer de invoer.');
                 return;
             }
+            this.rdwData_loading = true;
             fetch(`/api/rdw/kenteken`, {
                 method: 'POST',
                 credentials: 'include',
@@ -54,6 +58,7 @@ export function add_car() {
                             this.km_stand = data['data']["kilometer_stand"];
                         }
                         this.rdwData_error = '';
+                        this.rdwData_loading = false;
                     }else{
                         this.rdwData_error = 'Geen gegevens gevonden voor dit kenteken. Controleer de invoer.';
                     }
@@ -120,9 +125,11 @@ export function add_car() {
         },
         async submitConceptCar() {
             await this.submitCar('/api/AddConceptcar');
+            this.isConceptSaved = true;
         },
         async submitBeschikbaarCar() {
             await this.submitCar('/api/Addcar');
+              this.isPublished = true;
         },
 
         async submitCar(url) {
@@ -151,6 +158,9 @@ export function add_car() {
                     },
                         
                     );
+                    if (!response.ok) {
+                        throw new Error(`Netwerkfout: ${response.statusText}`);
+                    }
                     const data = await response.json();
                     console.log('Response van server:', data);
         }

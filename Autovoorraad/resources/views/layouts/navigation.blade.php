@@ -1,16 +1,16 @@
-<nav x-transition class="bg-black-pearl-950 border-r border-gray-100 fixed top-0 left-0 h-screen min-h-screen transition-all duration-300 z-50" :class="sidebarCollapsed ? 'w-40' : 'w-80'">
+<nav x-transition class="bg-black-pearl-950 border-r border-gray-100 fixed top-0 left-0 h-screen min-h-screen transition-all duration-300 z-50" :class="sidebarCollapsed ? 'w-30' : 'w-70'">
     <!-- Primary Navigation Menu -->
     
-        <div x-transition :class="sidebarCollapsed ? 'px-3 sm:px-2 lg:px-1' : 'px-4 sm:px-6 lg:px-8'" class="flex flex-col justify-between w-min h-full gap-6">
+        <div x-transition :class="sidebarCollapsed ? 'px-3 sm:px-2 lg:px-1' : 'px-1 sm:px-2 lg:px-4'" class="flex flex-col justify-between items-center w-full h-full gap-6">
                 <!-- Logo -->
                 <div class="flex items-center" :class="sidebarCollapsed ? 'justify-center p-3' : 'justify-start p-6'">
                     <a href="{{ route('dashboard') }}">
-                        <img src="{{ asset(Auth::user()->logo) }}" alt="Logo" class="w-auto">
+                        <img src="{{ asset(Auth::user()->logo) }}" alt="Logo" class="w-min">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-            <div class="flex w-full items-center flex-col gap-5">
+            <div class="flex w-min items-center flex-col gap-5">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         <svg xmlns="http://www.w3.org/2000/svg" :class="sidebarCollapsed ? '' : 'mr-4'" width="52" height="52" viewBox="0 0 52 52" fill="none">
                             <path d="M51.675 39.7008C51.6141 40.1172 51.5125 40.5234 51.3602 40.8383C51.086 41.3969 50.8219 41.4477 49.786 41.3969C48.4453 41.3359 46.5258 41.3969 44.4946 41.4781C44.4946 42.0367 44.5149 42.3008 44.5149 42.3008C44.6469 43.8344 45.3375 43.8852 45.6117 43.8852H49.9789C50.3649 43.8852 50.7203 43.8852 50.9946 43.7023C51.35 43.4687 51.5024 42.7883 51.6344 41.6C51.6547 41.4273 51.6649 41.2039 51.675 40.9398V40.9297C51.675 40.8484 51.6852 40.7469 51.6852 40.6352V40.5234C51.6852 40.2492 51.6852 39.9445 51.675 39.7008ZM0.304712 39.7008C0.365649 40.1172 0.467212 40.5234 0.619556 40.8383C0.893774 41.3969 1.15784 41.4477 2.19377 41.3969C3.5344 41.3359 5.45393 41.3969 7.48518 41.4781C7.48518 42.0367 7.46487 42.3008 7.46487 42.3008C7.33284 43.8344 6.64221 43.8852 6.36799 43.8852H2.00081C1.61487 43.8852 1.28987 43.8852 0.985181 43.7023C0.619556 43.4891 0.477368 42.7883 0.345337 41.6C0.325024 41.4273 0.314868 41.2039 0.304712 40.9398V40.9297C0.304712 40.8484 0.294556 40.7469 0.294556 40.6352V40.5234C0.304712 40.2492 0.304712 39.9445 0.304712 39.7008Z" fill="white"/>
@@ -44,7 +44,7 @@
                     </x-nav-link>
             </div>
 
-            <div x-transition :class="sidebarCollapsed ? 'gap-2 px-4' : ''" class="border-t-3 py-6 border-orange-500 flex justify-evenly items-center w-full">
+            <div x-transition :class="sidebarCollapsed ? 'gap-2 px-4 flex-col' : ''" class="border-t-3 py-6 border-orange-500 flex justify-evenly items-center w-full">
                 <div class="cursor-pointer">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

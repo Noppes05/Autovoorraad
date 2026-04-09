@@ -31,6 +31,7 @@ class AutoController extends Controller
         $kenteken = $request->input('kenteken');
 
         $vehicleData = $rdwService->getVehicleData($kenteken);
+        
         if (!$vehicleData) {
             return response()->json([
                 'success' => false,
