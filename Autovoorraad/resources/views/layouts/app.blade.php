@@ -23,6 +23,7 @@
     <body class="antialiased ">
         <div x-data="{ sidebarCollapsed: false }" class="min-h-screen bg-gray-100 flex">
             @include('layouts.navigation')
+            <x-toast />
             <!-- Page Content -->
             <main class="flex-1 pt-8 min-h-screen" :class="sidebarCollapsed ? 'ml-30' : 'ml-70'">
                 {{ $slot }}

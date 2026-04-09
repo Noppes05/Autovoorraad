@@ -1,3 +1,5 @@
+import { toast } from "../utils/toast";
+
 export function add_car() {
     return {
         kenteken: '',
@@ -122,14 +124,17 @@ export function add_car() {
                 this.fotos.push(file)
                 console.log('Huidige foto', this.fotos);
             }
+            toast.success(`${files.length} foto(s) toegevoegd`);
         },
         async submitConceptCar() {
             await this.submitCar('/api/AddConceptcar');
             this.isConceptSaved = true;
+            toast.success('Concept auto succesvol opgeslagen');
         },
         async submitBeschikbaarCar() {
             await this.submitCar('/api/Addcar');
               this.isPublished = true;
+              toast.success('Auto succesvol gepubliceerd');
         },
 
         async submitCar(url) {

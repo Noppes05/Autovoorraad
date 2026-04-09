@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Services\RdWService;
 use Illuminate\Http\Request;
+use App\Models\Auto;
+use App\Models\AutoFoto;
+use Illuminate\Container\Attributes\Auth;
 
 class AutoController extends Controller
 {
@@ -13,6 +16,16 @@ class AutoController extends Controller
     public function AutoToevoegen()
     {
         return view('Auto_toevoegen');
+    }
+
+
+    public function details($id)
+    {
+        $auto = Auto::where('id', $id)->with('fotos')->firstOrFail();
+        if($auto->user_id !== request()->user()->id){
+            abort(403);
+        }
+        return view('Auto_details', ['auto' => $auto]);
     }
 
     /**

@@ -1,3 +1,5 @@
+import { toast } from "../utils/toast";
+
 export function autovoorraad() {
     return {
         autos: [],
@@ -43,6 +45,7 @@ export function autovoorraad() {
                 console.log("Autos opgehaald:", data);
                 this.autos = data;
             } catch (error) {
+                toast.error("Fout bij het ophalen van auto's");
                 console.error("Fout bij het ophalen van auto's, error");
             }
         },
@@ -61,10 +64,15 @@ export function autovoorraad() {
                 if (!response.ok) {
                     throw new Error("Netwerkfout bij het verwijderen van de auto");
                 }
+                toast.success("Auto succesvol verwijderd");
                 this.getCars();
             } catch (error) {   
+                toast.error("Fout bij het verwijderen van de auto");
                 console.error(`Fout bij het verwijderen van de auto met ID ${car.id}`, error);
             }
+        },
+        openDetails(car){
+            window.location.href = `/auto/${car.id}`;
         }
     }
 }

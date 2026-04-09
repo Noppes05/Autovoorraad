@@ -15,13 +15,18 @@ Route::domain('{tenant}.' . parse_url(config('app.url'), PHP_URL_HOST))->group(f
     });
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    Route::get('/auto-toevoegen', [AutoController::class, 'AutoToevoegen'])->name('auto.toevoegen');
+    Route::get('/auto/{id}', [AutoController::class,'details'])->name('auto.detail');
+    
+});
 
-Route::get('/auto-toevoegen', [AutoController::class, 'AutoToevoegen'])->middleware(['auth', 'verified'])->name('auto.toevoegen');
+
 
 Route::middleware('auth:sanctum','throttle:30,1')->group(function() {
     Route::post('/api/rdw/kenteken', [AutoController::class, 'fetchFromRdw'])->name('rdw.kenteken');

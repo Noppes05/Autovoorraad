@@ -21,7 +21,7 @@
          </thead>
          <tbody class="bg-white">
            <template x-for="auto in autos" :key="auto.id">
-                <tr class="border-b-2 relative last:border-0 border-black-pearl-950" x-on:click="alert('clicked auto with id: ' + auto.id)" >
+                <tr class="border-b-2 relative last:border-0 border-black-pearl-950 cursor-pointer" x-on:click="openDetails(auto)" >
                     <td class="py-4 pl-3" >
                         <div class="flex gap-4 items-center w-min">
                             <div class="relative w-40 h-24">
