@@ -7,12 +7,13 @@
             </div>
             <div class="flex self-start gap-4 md:gap-0 md:flex-row flex-col">
                 <a x-on:click="submitConceptCar()" class="ml-4 inline-flex items-center px-4 py-3 border border-black-pearl-950 hover:bg-black-pearl-950 hover:text-white rounded-md font-semibold text-xs text-black-pearl-950 uppercase tracking-widest  focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                    Concept Opslaan</a>
+                    Concept Opslaan
                     <template x-transition x-if="isConceptSaved">
                          <svg class="w-5 h-5 text-green-400 shrink-0 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
                     </template>
+                </a>
                 <a x-on:click="submitBeschikbaarCar()" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
                     Opslaan & Publiceren
                     <template x-transition x-if="isPublished">
@@ -112,44 +113,23 @@
                 
             </div>
          </template>
-         <template x-if="status === 'foto_toevoegen'" x-transition>
-            <div class="p-4">
-                <div class="w-full flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between mb-4">
-                    <div>
-                        <h1 class="text-4xl font-serif font-bold text-gray-800">Foto's beheren</h1>
-                        <p class="text-md">Voeg foto’s toe voor de auto</p>
-                    </div>
-                    <div class="flex">
-                        <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 w-full md:w-min bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                            Opslaan foto's en terug naar overzicht
-                        </a>
-                    </div>
-                </div>
-                <div class="flex flex-col md:flex-row gap-4">
-                    <template x-for="(foto, index) in fotos" :key="index">
-                        <div draggable="true"
-                            @dragstart="startDrag(index)"
-                            @dragover.prevent="dragOver(index)"
-                            @drop="drop(index)"
-                            @dragend="endDrag"
-                            :class="{
-                                    'opacity-50': draggedIndex === index,
-                                    'border-l-2 border-blaze-orange-600': overIndex === index
-                                }"
-                             class="relative rounded group bg-gray-100 h-48 w-full md:w-1/5 flex items-center overflow-hidden justify-center">
-                            <img :src="URL.createObjectURL(foto)" :alt="foto.name" class="object-cover group-hover:scale-110 h-full w-full rounded transition-all duration-150">
-                            <div class="absolute hidden  bg-black/30 z-10 top-0 left-0 group-hover:flex transition-all justify-center items-center w-full h-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="cursor-pointer" x-on:click="deletePicture(index)" width="52" height="52" viewBox="0 0 52 52" fill="none">
-                                    <path d="M41.1668 8.66667H33.5835L31.4168 6.5H20.5835L18.4168 8.66667H10.8335V13H41.1668M13.0002 41.1667C13.0002 42.3159 13.4567 43.4181 14.2694 44.2308C15.082 45.0435 16.1842 45.5 17.3335 45.5H34.6668C35.8161 45.5 36.9183 45.0435 37.731 44.2308C38.5436 43.4181 39.0002 42.3159 39.0002 41.1667V15.1667H13.0002V41.1667Z" fill="#FC6A00"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </template>
-                    <div x-on:click="OpenFotoKiezen()" class="w-full h-48 rounded bg-black-pearl-950 border cursor-pointer border-blaze-orange-600 text-blaze-orange-600 flex justify-center items-center">+
-                    <input type="file" accept="image/*" multiple  @change="AddFoto" hidden id="fileinput" x-model='fileInput'></div>
-                </div>
+         <template x-if="status === 'foto_toevoegen'">
+             <div @photos-updated="updateFotos($event.detail)">
+                 <div class="w-full flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between mb-4">
+                       <div>
+                           <h1 class="text-4xl font-serif font-bold text-gray-800">Foto's beheren</h1>
+                           <p class="text-md">Voeg foto’s toe voor de auto</p>
+                       </div>
+                       <div class="flex w-min">
+                           <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 w-full md:w-max bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
+                               Opslaan foto's en <br>
+                               terug naar overzicht
+                           </a>
+                       </div>
+                   </div>
+                <x-photo-manager />
             </div>
-         </template>
+        </template>
     </div>
     
 </x-app-layout>

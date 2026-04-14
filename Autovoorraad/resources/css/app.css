@@ -31,3 +31,7 @@
     --color-blaze-orange-900: #82330c;
     --color-blaze-orange-950: #461704;
 }
+
+[x-cloak] {
+    display: none !important;
+}

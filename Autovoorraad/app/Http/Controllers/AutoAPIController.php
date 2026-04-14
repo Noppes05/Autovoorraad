@@ -20,6 +20,18 @@ class AutoAPIController extends Controller
         return Auto::where('user_id', request()->user()->id)->with('fotos')->get();
     }
 
+    public function show(Request $request, $id)
+    {
+        $auto = Auto::where('id', $id)
+            ->where('user_id', $request->user()->id)
+            ->with(['fotos' => function ($query) {
+                $query->orderBy('volgorde_nummer');
+            }])
+            ->firstOrFail();
+
+        return response()->json($auto);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -169,11 +181,6 @@ class AutoAPIController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(auto $auto)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */

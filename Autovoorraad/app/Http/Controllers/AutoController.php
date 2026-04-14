@@ -21,11 +21,11 @@ class AutoController extends Controller
 
     public function details($id)
     {
-        $auto = Auto::where('id', $id)->with('fotos')->firstOrFail();
-        if($auto->user_id !== request()->user()->id){
-            abort(403);
-        }
-        return view('Auto_details', ['auto' => $auto]);
+        Auto::where('id', $id)
+            ->where('user_id', request()->user()->id)
+            ->firstOrFail();
+
+        return view('Auto_details');
     }
 
     /**
