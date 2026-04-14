@@ -17,7 +17,13 @@ class AutoAPIController extends Controller
      */
     public function index()
     {
-        return Auto::where('user_id', request()->user()->id)->with('fotos')->get();
+        $autos = Auto::where('user_id', request()->user()->id)
+            ->with(['fotos' => function ($query) {
+                $query->orderBy('volgorde_nummer');
+            }])
+            ->get();
+
+        return response()->json($autos->map(fn ($auto) => $this->normalizeAuto($auto))->values());
     }
 
     public function show(Request $request, $id)
@@ -29,7 +35,7 @@ class AutoAPIController extends Controller
             }])
             ->firstOrFail();
 
-        return response()->json($auto);
+        return response()->json($this->normalizeAuto($auto));
     }
 
     public function update_fotos(Request $request, $id)
@@ -271,5 +277,28 @@ class AutoAPIController extends Controller
             return response()->json(['message' => 'Fout bij het verwijderen van de auto: ' . $e->getMessage()], 500);
         }
         return response()->json(['message' => 'Auto succesvol verwijderd'], 200);
+    }
+
+    private function normalizeAuto(Auto $auto): array
+    {
+        return [
+            'id' => $auto->id,
+            'kenteken' => $auto->kenteken,
+            'merk' => $auto->merk,
+            'model' => $auto->model,
+            'prijs' => $auto->prijs,
+            'km_stand' => $auto->km_stand,
+            'bouwjaar' => $auto->bouwjaar,
+            'beschrijving' => $auto->beschrijving,
+            'status' => $auto->status,
+            'created_at' => $auto->created_at,
+            'fotos' => $auto->fotos->map(function ($foto) {
+                return [
+                    'id' => $foto->id,
+                    'url' => asset('storage/' . $foto->foto_path),
+                    'volgorde_nummer' => $foto->volgorde_nummer,
+                ];
+            })->values(),
+        ];
     }
 }

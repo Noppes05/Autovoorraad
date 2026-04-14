@@ -21,7 +21,7 @@
          </thead>
          <tbody class="bg-white">
            <template x-for="auto in autos" :key="auto.id">
-                <tr class="border-b-2 relative last:border-0 border-black-pearl-950 cursor-pointer" x-on:click="openDetails(auto)" >
+                <tr class="border-b-2 relative last:border-0 border-black-pearl-950 cursor-pointer hover:bg-gray-200 transition" x-on:click="openDetails(auto)" >
                     <td class="py-4 pl-3" >
                         <div class="flex gap-4 items-center w-min">
                             <div class="relative w-40 h-24">
@@ -31,7 +31,7 @@
                                     </div>
                                 </template>
                                 <template x-if="auto.fotos.length > 0">
-                                    <img :src="auto.fotos['0'].foto_path" alt="" class="object-cover w-full h-full rounded">
+                                    <img :src="auto.fotos['0'].url" alt="" class="object-cover w-full h-full rounded">
                                 </template>
                             </div>
                             <div class="w-max grow-0">
@@ -58,7 +58,7 @@
                     <td class="p-4" >
                         <div class="h-full my-auto flex gap-2 items-center justify-end"">
                             <!-- Voeg hier actieknoppen toe, zoals bewerken of verwijderen -->
-                            <button @click.stop x-on:click="alert('Clicked update')" class="bg-black-pearl-700 cursor-pointer hover:bg-black-pearl-800 transition text-white p-3 rounded">
+                            <button @click.stop @click="Updatecar(auto)" class="bg-black-pearl-700 cursor-pointer hover:bg-black-pearl-800 transition text-white p-3 rounded">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                                  <path d="M1.5 12H2.56875L9.9 4.66875L8.83125 3.6L1.5 10.9312V12ZM0 13.5V10.3125L9.9 0.43125C10.05 0.29375 10.2156 0.1875 10.3969 0.1125C10.5781 0.0375 10.7688 0 10.9688 0C11.1687 0 11.3625 0.0375 11.55 0.1125C11.7375 0.1875 11.9 0.3 12.0375 0.45L13.0688 1.5C13.2188 1.6375 13.3281 1.8 13.3969 1.9875C13.4656 2.175 13.5 2.3625 13.5 2.55C13.5 2.75 13.4656 2.94062 13.3969 3.12188C13.3281 3.30313 13.2188 3.46875 13.0688 3.61875L3.1875 13.5H0ZM12 2.55L10.95 1.5L12 2.55ZM9.35625 4.14375L8.83125 3.6L9.9 4.66875L9.35625 4.14375Z" fill="currentcolor"/>
                                 </svg>

@@ -49,6 +49,9 @@ export function autovoorraad() {
                 console.error("Fout bij het ophalen van auto's, error");
             }
         },
+        async Updatecar(car){
+            window.location.href = `/auto/${car.id}/bewerken`;
+        },
         async deleteCar(car){
             try {
                 const response = await fetch(`/api/autos/delete/`, {

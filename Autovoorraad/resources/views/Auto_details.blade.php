@@ -35,10 +35,10 @@
             <div class="md:col-span-2">
                 <div class="grid gap-4 grid-flow-row-dense grid-cols-2 grid-rows-2 md:grid-cols-4 md:grid-rows-2">
                     <div class="h-min md:h-full min-h-0 relative bg-white row-span-3 md:row-span-2 col-span-2 md:col-span-3 rounded-xl overflow-hidden">
-                        <img :src="photoUrl(auto.fotos?.[0]?.foto_path)" alt="Auto Foto" class="absolute inset-0 object-cover w-full h-full rounded-xl">
+                        <img :src="photoUrl(auto.fotos?.[0]?.url)" alt="Auto Foto" class="absolute inset-0 object-cover w-full h-full rounded-xl">
                     </div>
                     <div class="bg-white h-min md:h-50 rounded-2xl overflow-hidden">
-                        <img :src="photoUrl(auto.fotos?.[1]?.foto_path)" alt="Auto Foto" class="object-cover w-full h-full rounded-xl">
+                        <img :src="photoUrl(auto.fotos?.[1]?.url)" alt="Auto Foto" class="object-cover w-full h-full rounded-xl">
                     </div>
                     <div class="bg-white h-min md:h-50 rounded-2xl z-1 overflow-hidden group relative cursor-pointer" @click="openPhotoGallery()">
                         <div class="absolute  z-10 h-full w-full flex justify-center items-center text-xl text-center text-semibold text-white group-hover:text-2xl group-hover:bg-black-pearl-950/20 bg-black-pearl-950/5 transition-all ease-in gap-2 flex-col ">
@@ -47,7 +47,7 @@
                                 <p>Bekijk alles</p>
                             </div>
                         </div>
-                        <img :src="photoUrl(auto.fotos?.[2]?.foto_path)" alt="Auto Foto" class="object-cover group-hover:blur-[5px] transition ease-in blur-sm w-full h-full rounded-xl">
+                        <img :src="photoUrl(auto.fotos?.[2]?.url)" alt="Auto Foto" class="object-cover group-hover:blur-[5px] transition ease-in blur-sm w-full h-full rounded-xl">
                     </div>
                 </div>
 
