@@ -8,6 +8,7 @@ export function autoDetails(autoId = null) {
         auto: null,
         loading: true,
         error: '',
+        statusUpdating: false,
         init() {
             this.loadAuto();
         },
@@ -95,6 +96,58 @@ export function autoDetails(autoId = null) {
             };
 
             return classes[status] ?? 'before:bg-gray-300';
+        },
+        getCookie(name) {
+            return document.cookie
+                .split('; ')
+                .find((row) => row.startsWith(name + '='))
+                ?.split('=')[1];
+        },
+        async updateStatus(newStatus) {
+            if (!this.auto || this.statusUpdating || this.auto.status === newStatus) {
+                return;
+            }
+
+            this.statusUpdating = true;
+
+            const formData = new FormData();
+            formData.append('kenteken', this.auto.kenteken ?? '');
+            formData.append('merk', this.auto.merk ?? '');
+            formData.append('model', this.auto.model ?? '');
+            formData.append('bouwjaar', this.auto.bouwjaar ?? '');
+            formData.append('km_stand', this.auto.km_stand ?? '');
+            formData.append('prijs', this.auto.prijs ?? '');
+            formData.append('beschrijving', this.auto.beschrijving ?? '');
+            formData.append('status', newStatus);
+            formData.append('replace_fotos', '0');
+
+            try {
+                const response = await fetch(`/api/autos/${this.autoId}/update`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'X-XSRF-TOKEN': decodeURIComponent(this.getCookie('XSRF-TOKEN') ?? ''),
+                        accept: 'application/json',
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const data = await response.json().catch(() => ({}));
+                    throw new Error(data.message || 'Status wijzigen mislukt.');
+                }
+
+                this.auto.status = newStatus;
+                toast.success(newStatus === 'verkocht' ? 'Auto gemarkeerd als verkocht.' : 'Auto gemarkeerd als beschikbaar.');
+            } catch (error) {
+                const message = error instanceof Error ? error.message : 'Status wijzigen mislukt.';
+                toast.error(message);
+            } finally {
+                this.statusUpdating = false;
+            }
+        },
+        openPhotoGallery() {
+            window.dispatchEvent(new CustomEvent('open-image-slider'));
         },
     };
 }

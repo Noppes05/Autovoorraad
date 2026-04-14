@@ -1,11 +1,10 @@
+@props(['initialFotos' => []])
+
 <div
-    x-data="photoManager(
-        {{ $initialFotos ?? '[]' }},
-        (fotos) => $dispatch('photos-updated', fotos)
-    )"
+    x-data="photoManager( @js($initialFotos ?? []))"
     class="p-4"
 >
-    <div class="flex flex-col md:flex-row gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
         <template x-for="(foto, index) in fotos" :key="index">
             <div
@@ -18,10 +17,10 @@
                     'opacity-50': draggedIndex === index,
                     'border-l-2 border-blaze-orange-600': overIndex === index
                 }"
-                class="relative rounded group bg-gray-100 h-48 w-full md:w-1/4 flex items-center overflow-hidden justify-center"
+                class="relative rounded group bg-gray-100 h-48 w-full flex items-center overflow-hidden justify-center"
             >
                 <img
-                    :src="foto instanceof File ? URL.createObjectURL(foto) : foto"
+                    :src="resolvePhotoSrc(foto)"
                     class="object-cover h-full w-full group-hover:scale-110 transition-all"
                 >
 
@@ -38,7 +37,7 @@
         <!-- ADD -->
         <div
             @click="$refs.file.click()"
-            class="w-full md:w-1/4 h-48 rounded bg-black-pearl-950 border cursor-pointer border-blaze-orange-600 text-blaze-orange-600 flex justify-center items-center"
+            class="w-full h-48 rounded bg-black-pearl-950 border cursor-pointer border-blaze-orange-600 text-blaze-orange-600 flex justify-center items-center"
         >
             +
             <input type="file" multiple hidden accept="image/*" x-ref="file" @change="addFoto">

@@ -24,8 +24,7 @@
                 </a>
             </div>
         </div>
-        <template x-if="status === 'basisinformatie'" x-transition>
-            <div>
+        <div x-show="status === 'basisinformatie'" x-transition>
             <div class="p-2 md:p-4 bg-white rounded mb-4">
                 <div class="flex items-center gap-4 mb-8">
                     <div class="bg-blaze-orange-600 rounded-full w-1.5 h-8 inline-block"></div>
@@ -103,33 +102,31 @@
                     </a>
                 </div>
                 <div  class="flex gap-6">
-                    <template x-for="(foto, index) in fotos" :key="index">
+                    <template x-for="(foto, index) in fotos.slice(0, 5)" :key="index">
                         <div 
                              class="relative rounded bg-gray-100 h-48 w-1/5 flex items-center justify-center">
                             <img :src="URL.createObjectURL(foto)" :alt="foto.name" class="object-cover h-full w-full rounded">
                         </div>
                     </template>
                 </div>
-                
             </div>
-         </template>
-         <template x-if="status === 'foto_toevoegen'">
-             <div @photos-updated="updateFotos($event.detail)">
-                 <div class="w-full flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between mb-4">
-                       <div>
-                           <h1 class="text-4xl font-serif font-bold text-gray-800">Foto's beheren</h1>
-                           <p class="text-md">Voeg foto’s toe voor de auto</p>
-                       </div>
-                       <div class="flex w-min">
-                           <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 w-full md:w-max bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                               Opslaan foto's en <br>
-                               terug naar overzicht
-                           </a>
-                       </div>
-                   </div>
-                <x-photo-manager />
+        </div>
+
+        <div x-show="status === 'foto_toevoegen'" x-transition @photos-updated="updateFotos($event.detail)">
+            <div class="w-full flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-4xl font-serif font-bold text-gray-800">Foto's beheren</h1>
+                    <p class="text-md">Voeg foto’s toe voor de auto</p>
+                </div>
+                <div class="flex w-min">
+                    <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 w-full md:w-max bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
+                        Opslaan foto's en <br>
+                        terug naar overzicht
+                    </a>
+                </div>
             </div>
-        </template>
-    </div>
+            <x-photo-manager />
+        </div>
+        </div>
     
 </x-app-layout>

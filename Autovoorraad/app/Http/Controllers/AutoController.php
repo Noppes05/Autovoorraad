@@ -21,11 +21,76 @@ class AutoController extends Controller
 
     public function details($id)
     {
-        Auto::where('id', $id)
+        $auto = Auto::where('id', $id)
             ->where('user_id', request()->user()->id)
+            ->with(['fotos' => function ($query) {
+                $query->orderBy('volgorde_nummer');
+            }])
             ->firstOrFail();
 
-        return view('Auto_details');
+        $initialFotos = $auto->fotos
+            ->map(function ($foto) {
+                return [
+                    'id' => $foto->id,
+                    'url' => asset('storage/' . $foto->foto_path),
+                ];
+            })
+            ->values()
+            ->toArray();
+
+        return view('Auto_details', [
+            'initialFotos' => $initialFotos,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $auto = Auto::where('id', $id)
+            ->where('user_id', request()->user()->id)
+            ->with(['fotos' => function ($query) {
+                $query->orderBy('volgorde_nummer');
+            }])
+            ->firstOrFail();
+
+        $initialFotos = $auto->fotos
+            ->map(function ($foto) {
+                return [
+                    'id' => $foto->id,
+                    'url' => asset('storage/' . $foto->foto_path),
+                ];
+            })
+            ->values()
+            ->toArray();
+
+        return view('Auto_bewerken', [
+            'auto' => $auto,
+            'initialFotos' => $initialFotos,
+        ]);
+    }
+
+    public function manageFotos($id)
+    {
+        $auto = Auto::where('id', $id)
+            ->where('user_id', request()->user()->id)
+            ->with(['fotos' => function ($query) {
+                $query->orderBy('volgorde_nummer');
+            }])
+            ->firstOrFail();
+
+        $initialFotos = $auto->fotos
+            ->map(function ($foto) {
+                return [
+                    'id' => $foto->id,
+                    'url' => asset('storage/' . $foto->foto_path),
+                ];
+            })
+            ->values()
+            ->toArray();
+
+        return view('Auto_fotos_beheer', [
+            'autoId' => $auto->id,
+            'initialFotos' => $initialFotos,
+        ]);
     }
 
     /**

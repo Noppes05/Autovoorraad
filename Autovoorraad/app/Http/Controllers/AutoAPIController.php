@@ -32,6 +32,69 @@ class AutoAPIController extends Controller
         return response()->json($auto);
     }
 
+    public function update_fotos(Request $request, $id)
+    {
+        $auto = Auto::where('id', $id)
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
+
+        $request->validate([
+            'fotos' => 'required|array|min:1',
+            'fotos.*' => 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
+        ]);
+
+        $this->delete_auto_fotos($auto);
+        $this->store_auto_fotos($auto, $request->file('fotos'));
+
+        return response()->json(['message' => 'Foto\'s succesvol bijgewerkt.'], 200);
+    }
+
+    public function update_car(Request $request, $id)
+    {
+        $auto = Auto::where('id', $id)
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
+
+        $request->validate([
+            'kenteken' => 'required|string|max:255',
+            'merk' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'bouwjaar' => 'required|integer',
+            'beschrijving' => 'nullable|string',
+            'prijs' => 'nullable|numeric',
+            'km_stand' => 'nullable|integer',
+            'status' => 'required|in:beschikbaar,concept,verkocht',
+            'replace_fotos' => 'nullable|boolean',
+            'fotos' => 'required_if:replace_fotos,1|array|min:1',
+            'fotos.*' => 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
+        ]);
+
+        $auto->update([
+            'kenteken' => $request->input('kenteken'),
+            'merk' => $request->input('merk'),
+            'model' => $request->input('model'),
+            'bouwjaar' => $request->input('bouwjaar'),
+            'beschrijving' => $request->input('beschrijving'),
+            'prijs' => $request->input('prijs'),
+            'km_stand' => $request->input('km_stand'),
+            'status' => $request->input('status'),
+        ]);
+
+        if ($request->boolean('replace_fotos')) {
+            $this->delete_auto_fotos($auto);
+
+            $fotos = $request->file('fotos', []);
+            if (!empty($fotos)) {
+                $this->store_auto_fotos($auto, $fotos);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Auto succesvol bijgewerkt.',
+            'auto_id' => $auto->id,
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -46,7 +109,7 @@ class AutoAPIController extends Controller
         catch(UnprocessableEntityHttpException $e){
             return response()->json(['message' => 'Fout bij het toevoegen van de auto: ' . $e->getMessage()], 422);
         }
-            return response()->json(['message' => 'Auto succesvol toegevoegd', 'auto_id' => $auto->id], 201);
+            return redirect()->route('auto.detail', ['id' => $auto->id])->with('success', 'Auto succesvol opgeslagen als concept');
     }
 
     public function store_beschikbaar(Request $request)

@@ -12,12 +12,12 @@
                     </svg>
                     Verwijderen
                 </button>
-                <button x-show="auto" @click.stop="alert('Clicked update')" class="bg-black-pearl-700 cursor-pointer hover:bg-black-pearl-800 flex justify-between items-center gap-5 transition text-white font-semibold p-2 md:px-6 rounded-lg">
+                <a x-show="auto" :href="`/auto/${auto.id}/bewerken`" class="bg-black-pearl-700 cursor-pointer hover:bg-black-pearl-800 flex justify-between items-center gap-5 transition text-white font-semibold p-2 md:px-6 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                         <path d="M1.5 12H2.56875L9.9 4.66875L8.83125 3.6L1.5 10.9312V12ZM0 13.5V10.3125L9.9 0.43125C10.05 0.29375 10.2156 0.1875 10.3969 0.1125C10.5781 0.0375 10.7688 0 10.9688 0C11.1687 0 11.3625 0.0375 11.55 0.1125C11.7375 0.1875 11.9 0.3 12.0375 0.45L13.0688 1.5C13.2188 1.6375 13.3281 1.8 13.3969 1.9875C13.4656 2.175 13.5 2.3625 13.5 2.55C13.5 2.75 13.4656 2.94062 13.3969 3.12188C13.3281 3.30313 13.2188 3.46875 13.0688 3.61875L3.1875 13.5H0ZM12 2.55L10.95 1.5L12 2.55ZM9.35625 4.14375L8.83125 3.6L9.9 4.66875L9.35625 4.14375Z" fill="currentcolor"/>
                     </svg>
                     Bewerken
-                </button>
+                </a>
             </div>
         </div>
 
@@ -40,14 +40,14 @@
                     <div class="bg-white h-min md:h-50 rounded-2xl overflow-hidden">
                         <img :src="photoUrl(auto.fotos?.[1]?.foto_path)" alt="Auto Foto" class="object-cover w-full h-full rounded-xl">
                     </div>
-                    <div class="bg-white h-min md:h-50 rounded-2xl z-1 overflow-hidden group relative cursor-pointer" @click="openPhotoGallery(auto.fotos)">
-                        <div class="absolute  z-10 h-full w-full flex justify-center items-center text-xl text-center text-semibold text-white group-hover:text-2xl transition-all ease-in gap-2 flex-col ">
+                    <div class="bg-white h-min md:h-50 rounded-2xl z-1 overflow-hidden group relative cursor-pointer" @click="openPhotoGallery()">
+                        <div class="absolute  z-10 h-full w-full flex justify-center items-center text-xl text-center text-semibold text-white group-hover:text-2xl group-hover:bg-black-pearl-950/20 bg-black-pearl-950/5 transition-all ease-in gap-2 flex-col ">
                             <div>
                                 <p x-text="'+' + (auto.fotos?.length ?? 0)"></p>
                                 <p>Bekijk alles</p>
                             </div>
                         </div>
-                        <img :src="photoUrl(auto.fotos?.[2]?.foto_path)" alt="Auto Foto" class="object-cover group-hover:blur-none transition ease-in blur-sm w-full h-full rounded-xl">
+                        <img :src="photoUrl(auto.fotos?.[2]?.foto_path)" alt="Auto Foto" class="object-cover group-hover:blur-[5px] transition ease-in blur-sm w-full h-full rounded-xl">
                     </div>
                 </div>
 
@@ -80,7 +80,41 @@
                 </div>
                 <div class="bg-gray-100 shadow mt-10 p-6 h-full w-full rounded-2xl">
                     <p class="uppercase mb-6 font-semibold tracking-wide font-sans">beheer acties</p>
-                    <button class="uppercase cursor-pointer hover:bg-blaze-orange-900 bg-blaze-orange-950 text-blaze-orange-500 p-4 w-full font-bold rounded text-center">verkocht melden</button>
+                    <template x-if="auto?.status === 'concept'">
+                        <button
+                            type="button"
+                            @click="updateStatus('beschikbaar')"
+                            :disabled="statusUpdating"
+                            class="uppercase cursor-pointer hover:bg-green-800 bg-green-700 text-white p-4 w-full font-bold rounded text-center disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            <span x-show="!statusUpdating">Beschikbaar maken</span>
+                            <span x-show="statusUpdating">Bezig...</span>
+                        </button>
+                    </template>
+
+                    <template x-if="auto?.status === 'beschikbaar'">
+                        <button
+                            type="button"
+                            @click="updateStatus('verkocht')"
+                            :disabled="statusUpdating"
+                            class="uppercase cursor-pointer hover:bg-blaze-orange-900 bg-blaze-orange-950 text-blaze-orange-500 p-4 w-full font-bold rounded text-center disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            <span x-show="!statusUpdating">Verkocht melden</span>
+                            <span x-show="statusUpdating">Bezig...</span>
+                        </button>
+                    </template>
+
+                    <template x-if="auto?.status === 'verkocht'">
+                        <button
+                            type="button"
+                            @click="updateStatus('beschikbaar')"
+                            :disabled="statusUpdating"
+                            class="uppercase cursor-pointer hover:bg-green-800 bg-green-700 text-white p-4 w-full font-bold rounded text-center disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            <span x-show="!statusUpdating">Opnieuw beschikbaar</span>
+                            <span x-show="statusUpdating">Bezig...</span>
+                        </button>
+                    </template>
                     <button class="bg-white p-4 w-full hover:text-white hover:bg-black-pearl-950 cursor-pointer transition font-bold rounded text-center flex items-center gap-4 justify-between mt-6">
                         <div class="flex gap-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
@@ -92,7 +126,7 @@
                             <path d="M4.6 6L0 1.4L1.4 0L7.4 6L1.4 12L0 10.6L4.6 6Z" fill="currentcolor"/>
                         </svg>
                     </button>
-                    <button class="p-4 cursor-pointer bg-white w-full mt-6 font-bold hover:bg-blaze-orange-100 flex rounded text-blaze-orange-600 gap-4 justify-between">
+                    <a :href="`/auto/${auto.id}/fotos`" class="p-4 cursor-pointer bg-white w-full mt-6 font-bold hover:bg-blaze-orange-100 flex rounded text-blaze-orange-600 gap-4 justify-between">
                         <div class="flex gap-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="self-center" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M7 12H17L13.55 7.5L11.25 10.5L9.7 8.5L7 12ZM6 16C5.45 16 4.97917 15.8042 4.5875 15.4125C4.19583 15.0208 4 14.55 4 14V2C4 1.45 4.19583 0.979167 4.5875 0.5875C4.97917 0.195833 5.45 0 6 0H18C18.55 0 19.0208 0.195833 19.4125 0.5875C19.8042 0.979167 20 1.45 20 2V14C20 14.55 19.8042 15.0208 19.4125 15.4125C19.0208 15.8042 18.55 16 18 16H6ZM6 14H18V2H6V14ZM2 20C1.45 20 0.979167 19.8042 0.5875 19.4125C0.195833 19.0208 0 18.55 0 18V4H2V18H16V20H2ZM6 2V14V2Z" fill="currentcolor"/>
@@ -102,10 +136,11 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="self-center" width="8" height="12" viewBox="0 0 8 12" fill="none">
                             <path d="M4.6 6L0 1.4L1.4 0L7.4 6L1.4 12L0 10.6L4.6 6Z" fill="currentcolor"/>
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+    <x-image-thumbnail-slider-popup :Fotos="$initialFotos" />
     <x-x-confirm-delete />
 </x-app-layout>

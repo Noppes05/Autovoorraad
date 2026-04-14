@@ -1,19 +1,19 @@
 import { toast } from "../utils/toast";
 
-export function photoManager(initialFotos = []) {
+export function photoManager(initialfotos = []) {
+    
+
     return {
         fotos: [],
         draggedIndex: null,
         overIndex: null,
 
         init() {
-            this.fotos = initialFotos.map(f => ({
-                file: null,
-                preview: f.url ?? f,
-                existing: true,
-                id: f.id ?? null
-            }))
+            this.fotos = Array.isArray(initialfotos) ? initialfotos : []
+            console.log('Initial photos in manager:', initialfotos);
         },
+
+        
 
         addFoto(event) {
             const files = event.target.files
@@ -59,6 +59,26 @@ export function photoManager(initialFotos = []) {
 
         emit() {
             this.$dispatch('photos-updated', this.fotos)
+        },
+
+        resolvePhotoSrc(foto) {
+            console.log('Resolving photo source for:', foto);
+            if(foto.url){
+                return foto.url
+            }
+            if (foto instanceof File) {
+                return URL.createObjectURL(foto)
+            }
+
+            if (typeof foto === 'string') {
+                return foto
+            }
+
+            if (foto?.preview) {
+                return foto.preview
+            }
+
+            return ''
         }
     }
 }
