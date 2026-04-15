@@ -6,7 +6,7 @@ export default defineConfig({
         host: '127.0.0.1',
         port: 5173,
         cors: {
-            origin: ['http://autovoorraad.127.0.0.1.nip.io'],
+            origin: ['https://autovoorraad.127.0.0.1.nip.io'],
             credentials: true,
         },
     },

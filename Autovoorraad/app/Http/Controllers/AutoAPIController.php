@@ -26,6 +26,9 @@ class AutoAPIController extends Controller
         return response()->json($autos->map(fn ($auto) => $this->normalizeAuto($auto))->values());
     }
 
+    /**
+     * show a newly created car in storage.
+     */
     public function show(Request $request, $id)
     {
         $auto = auto::where('id', $id)
@@ -38,6 +41,9 @@ class AutoAPIController extends Controller
         return response()->json($this->normalizeAuto($auto));
     }
 
+    /**
+     * Update the photos of the specified resource in storage.
+     */
     public function update_fotos(Request $request, $id)
     {
         $auto = auto::where('id', $id)
@@ -55,6 +61,9 @@ class AutoAPIController extends Controller
         return response()->json(['message' => 'Foto\'s succesvol bijgewerkt.'], 200);
     }
 
+    /**
+     * Update the car details of the specified resource in storage.
+     */
     public function update_car(Request $request, $id)
     {
         $auto = auto::where('id', $id)
@@ -102,7 +111,7 @@ class AutoAPIController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource with status CONCEPT in storage.
      */
     public function store_concept(Request $request)
     {
@@ -117,6 +126,9 @@ class AutoAPIController extends Controller
         return redirect()->route('auto.detail', ['id' => $auto->id])->with('success', 'Auto succesvol opgeslagen als concept');
     }
 
+    /**
+     * Store a newly created resource with status BESCHIKBAAR in storage.
+     */
     public function store_beschikbaar(Request $request)
     {
         try {
@@ -157,6 +169,7 @@ class AutoAPIController extends Controller
                 return response()->json(['message' => 'Auto succesvol bijgewerkt', 'auto_id' => $possibleauto->id], 201);
             }
             $auto = $this->store_car($request, Auto_status::BESCHIKBAAR);
+
         } catch (\Exception $e) {
             return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 422);
         } catch (UnprocessableEntityHttpException $e) {
@@ -246,17 +259,6 @@ class AutoAPIController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, auto $auto)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request)
@@ -277,6 +279,7 @@ class AutoAPIController extends Controller
         return response()->json(['message' => 'Auto succesvol verwijderd'], 200);
     }
 
+    // Helper method to normalize auto data for API responses.
     private function normalizeAuto(auto $auto): array
     {
         return [

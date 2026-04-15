@@ -17,6 +17,9 @@ class AutoController extends Controller
         return view('Auto_toevoegen');
     }
 
+    /**
+     * Show the page to see details of a car.
+     */
     public function details($id)
     {
         $auto = Auto::where('id', $id)
@@ -41,6 +44,9 @@ class AutoController extends Controller
         ]);
     }
 
+    /**
+     * Show the page to edit a car.
+     */
     public function edit($id)
     {
         $auto = Auto::where('id', $id)
@@ -66,6 +72,7 @@ class AutoController extends Controller
         ]);
     }
 
+    // Show the page to manage photos of a car.
     public function manageFotos($id)
     {
         $auto = Auto::where('id', $id)
