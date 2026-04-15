@@ -14,9 +14,6 @@ class RdwService
 
     /**
      * Fetch vehicle data from RDW API by license plate.
-     *
-     * @param string $kenteken
-     * @return array|null
      */
     public function getVehicleData(string $kenteken): ?array
     {
@@ -24,7 +21,7 @@ class RdwService
         $kenteken = strtoupper(str_replace(' ', '', $kenteken));
 
         // Validate kenteken format (Dutch format: XX-XX-XX or XXXXXX)
-        if (!preg_match('/^[A-Z0-9]{6}$/', $kenteken)) {
+        if (! preg_match('/^[A-Z0-9]{6}$/', $kenteken)) {
             return null;
         }
 
@@ -33,11 +30,12 @@ class RdwService
                 'kenteken' => "'{$kenteken}'",
             ]);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 Log::error('RDW API request failed', [
                     'status' => $response->status(),
-                    'kenteken' => $kenteken
+                    'kenteken' => $kenteken,
                 ]);
+
                 return null;
             }
 
@@ -52,17 +50,15 @@ class RdwService
         } catch (\Exception $e) {
             Log::error('RDW API exception', [
                 'message' => $e->getMessage(),
-                'kenteken' => $kenteken
+                'kenteken' => $kenteken,
             ]);
+
             return null;
         }
     }
 
     /**
      * Format the raw RDW data to a more usable structure.
-     *
-     * @param array $data
-     * @return array
      */
     protected function formatVehicleData(array $data): array
     {
@@ -77,9 +73,6 @@ class RdwService
 
     /**
      * Extract merk from voertuigsoort or merklijning.
-     *
-     * @param string|null $value
-     * @return string|null
      */
     protected function extractMerk(?string $value): ?string
     {
@@ -94,13 +87,10 @@ class RdwService
 
     /**
      * Extract bouwjaar from registration date.
-     *
-     * @param string|null $date
-     * @return string|null
      */
     protected function extractBouwjaar(?string $date): ?string
     {
-        if (!$date) {
+        if (! $date) {
             return null;
         }
 

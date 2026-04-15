@@ -12,7 +12,7 @@ class EnsureCanonicalHost
      * Force requests onto the configured APP_URL host (or its tenant subdomains)
      * so session and CSRF cookies are always issued for one domain tree.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {

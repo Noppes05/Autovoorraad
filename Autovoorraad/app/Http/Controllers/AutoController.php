@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\RdWService;
-use Illuminate\Http\Request;
 use App\Models\Auto;
-use App\Models\AutoFoto;
-use Illuminate\Container\Attributes\Auth;
+use App\Services\RdWService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AutoController extends Controller
 {
@@ -17,7 +16,6 @@ class AutoController extends Controller
     {
         return view('Auto_toevoegen');
     }
-
 
     public function details($id)
     {
@@ -32,7 +30,7 @@ class AutoController extends Controller
             ->map(function ($foto) {
                 return [
                     'id' => $foto->id,
-                    'url' => asset('storage/' . $foto->foto_path),
+                    'url' => asset('storage/'.$foto->foto_path),
                 ];
             })
             ->values()
@@ -56,7 +54,7 @@ class AutoController extends Controller
             ->map(function ($foto) {
                 return [
                     'id' => $foto->id,
-                    'url' => asset('storage/' . $foto->foto_path),
+                    'url' => asset('storage/'.$foto->foto_path),
                 ];
             })
             ->values()
@@ -81,7 +79,7 @@ class AutoController extends Controller
             ->map(function ($foto) {
                 return [
                     'id' => $foto->id,
-                    'url' => asset('storage/' . $foto->foto_path),
+                    'url' => asset('storage/'.$foto->foto_path),
                 ];
             })
             ->values()
@@ -96,30 +94,28 @@ class AutoController extends Controller
     /**
      * Fetch car data from RDW API by license plate.
      *
-     * @param Request $request
-     * @param RdwService $rdwService
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function fetchFromRdw(Request $request, RdwService $rdwService)
+    public function fetchFromRdw(Request $request, RdWService $rdwService)
     {
         $request->validate([
-            'kenteken' => 'required|string|max:10'
+            'kenteken' => 'required|string|max:10',
         ]);
 
         $kenteken = $request->input('kenteken');
 
         $vehicleData = $rdwService->getVehicleData($kenteken);
-        
-        if (!$vehicleData) {
+
+        if (! $vehicleData) {
             return response()->json([
                 'success' => false,
-                'message' => 'Geen voertuiggegevens gevonden voor dit kenteken.'
+                'message' => 'Geen voertuiggegevens gevonden voor dit kenteken.',
             ], 404);
         }
 
         return response()->json([
             'success' => true,
-            'data' => $vehicleData
+            'data' => $vehicleData,
         ]);
     }
 }
