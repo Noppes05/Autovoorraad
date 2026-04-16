@@ -13,20 +13,24 @@ class SyncAutoFotos
 
     public function handle(Auto $auto, array $fotos = [], bool $replace = true): void
     {
+        $startOrder = 1;
+
         if ($replace) {
             $this->deleteFotos($auto);
+        } else {
+            $startOrder = ((int) AutoFoto::where('auto_id', $auto->id)->max('volgorde_nummer')) + 1;
         }
 
         if (empty($fotos)) {
             return;
         }
 
-        $this->storeFotos($auto, $fotos);
+        $this->storeFotos($auto, $fotos, $startOrder);
     }
 
-    private function storeFotos(Auto $auto, array $fotos): void
+    private function storeFotos(Auto $auto, array $fotos, int $startOrder = 1): void
     {
-        $volgorde = 1;
+        $volgorde = $startOrder;
 
         foreach ($fotos as $foto) {
             $path = $foto->store('uploads', 'public');
