@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\StoreNewAuto;
+use App\Actions\SyncAutoFotos;
 use App\Enums\Auto_status;
 use App\Models\auto;
-use App\Models\Auto as ModelsAuto;
-use App\Models\AutoFoto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class AutoAPIController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Autos.
      */
     public function index()
     {
@@ -27,7 +26,7 @@ class AutoAPIController extends Controller
     }
 
     /**
-     * show a newly created car in storage.
+     * shows a details of the car.
      */
     public function show(Request $request, $id)
     {
@@ -55,8 +54,7 @@ class AutoAPIController extends Controller
             'fotos.*' => 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
         ]);
 
-        $this->delete_auto_fotos($auto);
-        $this->store_auto_fotos($auto, $request->file('fotos'));
+        SyncAutoFotos::run($auto, $request->file('fotos', []), true);
 
         return response()->json(['message' => 'Foto\'s succesvol bijgewerkt.'], 200);
     }
@@ -96,12 +94,8 @@ class AutoAPIController extends Controller
         ]);
 
         if ($request->boolean('replace_fotos')) {
-            $this->delete_auto_fotos($auto);
-
             $fotos = $request->file('fotos', []);
-            if (! empty($fotos)) {
-                $this->store_auto_fotos($auto, $fotos);
-            }
+            SyncAutoFotos::run($auto, $fotos, true);
         }
 
         return response()->json([
@@ -116,11 +110,13 @@ class AutoAPIController extends Controller
     public function store_concept(Request $request)
     {
         try {
-            $auto = $this->store_car($request, Auto_status::CONCEPT);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 500);
-        } catch (UnprocessableEntityHttpException $e) {
+            $auto = StoreNewAuto::run($request, Auto_status::CONCEPT);
+        } 
+        catch (UnprocessableEntityHttpException $e) {
             return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 422);
+        } 
+        catch (\Exception $e) {
+            return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 500);
         }
 
         return redirect()->route('auto.detail', ['id' => $auto->id])->with('success', 'Auto succesvol opgeslagen als concept');
@@ -132,130 +128,16 @@ class AutoAPIController extends Controller
     public function store_beschikbaar(Request $request)
     {
         try {
-            $possibleauto = auto::where('user_id', $request->user()->id)
-                ->where('kenteken', $request->input('kenteken'))
-                ->where('status', Auto_status::CONCEPT)
-                ->first();
-
-            // Reuse an existing concept auto for the same owner/kenteken to prevent duplicates.
-            if ($possibleauto) {
-                $request->validate([
-                    'merk' => 'required|string|max:255',
-                    'model' => 'required|string|max:255',
-                    'bouwjaar' => 'required|integer',
-                    'beschrijving' => 'nullable|string',
-                    'prijs' => 'nullable|numeric',
-                    'km_stand' => 'nullable|integer',
-                    'fotos.*' => 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
-                ]);
-                $possibleauto->update([
-                    'merk' => $request->input('merk'),
-                    'model' => $request->input('model'),
-                    'bouwjaar' => $request->input('bouwjaar'),
-                    'beschrijving' => $request->input('beschrijving'),
-                    'prijs' => $request->input('prijs'),
-                    'km_stand' => $request->input('km_stand'),
-                    'status' => Auto_status::BESCHIKBAAR,
-                ]);
-                if ($request->has('fotos')) {
-                    // Replace existing photos atomically for this concept -> beschikbaar transition.
-                    $this->delete_auto_fotos($possibleauto);
-
-                    // Add the new photos in the same request cycle.
-                    $fotos = $request->file('fotos');
-                    $this->store_auto_fotos($possibleauto, $fotos);
-                }
-
-                return response()->json(['message' => 'Auto succesvol bijgewerkt', 'auto_id' => $possibleauto->id], 201);
-            }
-            $auto = $this->store_car($request, Auto_status::BESCHIKBAAR);
-
-        } catch (\Exception $e) {
+            $auto = StoreNewAuto::run($request, Auto_status::BESCHIKBAAR);
+        } 
+        catch (UnprocessableEntityHttpException $e) {
             return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 422);
-        } catch (UnprocessableEntityHttpException $e) {
-            return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 422);
+        } 
+        catch (\Exception $e) {
+            return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 500);
         }
 
         return response()->json(['message' => 'Auto succesvol toegevoegd', 'auto_id' => $auto->id], 201);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    private function store_car(Request $request, Auto_status $status)
-    {
-        $request->validate([
-            'kenteken' => 'required|string|max:255',
-            'merk' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'bouwjaar' => 'required|integer',
-            'beschrijving' => 'nullable|string',
-            'prijs' => 'nullable|numeric',
-            'km_stand' => 'nullable|integer',
-            'fotos.*' => 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
-        ]);
-        $existingAuto = ModelsAuto::where('kenteken', $request->input('kenteken'))
-            ->where('user_id', $request->user()->id)
-            ->whereNot('status', Auto_status::VERKOCHT)
-            ->first();
-        if ($existingAuto) {
-            throw new UnprocessableEntityHttpException('Er bestaat al een auto met dit kenteken en gebruiker die niet verkocht is.');
-        }
-        $auto = auto::create([
-            'user_id' => $request->user()->id,
-            'kenteken' => $request->input('kenteken'),
-            'merk' => $request->input('merk'),
-            'model' => $request->input('model'),
-            'bouwjaar' => $request->input('bouwjaar'),
-            'beschrijving' => $request->input('beschrijving'),
-            'prijs' => $request->input('prijs'),
-            'km_stand' => $request->input('km_stand'),
-            'status' => $status,
-        ]);
-        if ($request->has('fotos')) {
-            $fotos = $request->file('fotos');
-            try {
-                $this->store_auto_fotos($auto, $fotos);
-            } catch (\Exception $e) {
-                // Roll back the just-created auto if photo storage fails.
-                $auto->delete();
-                throw new UnprocessableEntityHttpException("Fout bij het uploaden van de foto's: ".$e->getMessage());
-            }
-        }
-
-        return $auto;
-    }
-
-    /**
-     * Store the photos for the car
-     */
-    private function store_auto_fotos($auto, $fotos)
-    {
-        $i = 1;
-        foreach ($fotos as $foto) {
-            $path = $foto->store('uploads', 'public');
-            $autofoto = AutoFoto::create([
-                'auto_id' => $auto->id,
-                'foto_path' => $path,
-                'volgorde_nummer' => $i,
-            ]);
-            $i++;
-        }
-    }
-
-    /**
-     * delete fotos of the car
-     */
-    private function delete_auto_fotos($auto)
-    {
-        $auto_fotos = AutoFoto::where('auto_id', $auto->id)->get();
-        if ($auto_fotos) {
-            foreach ($auto_fotos as $foto) {
-                // Remove both the storage file and the DB record.
-                Storage::disk('public')->delete($foto->foto_path);
-                $foto->delete();
-            }
-        }
     }
 
     /**
@@ -263,14 +145,13 @@ class AutoAPIController extends Controller
      */
     public function destroy(Request $request)
     {
-
         $carId = $request->input('car')['id'];
         $car = auto::where('id', $carId)->where('user_id', $request->user()->id)->first();
         if (! $car) {
             return response()->json(['message' => 'Auto niet gevonden of je hebt geen toestemming om deze auto te verwijderen'], 404);
         }
         try {
-            $this->delete_auto_fotos($car);
+            SyncAutoFotos::run($car, [], true);
             $car->delete();
         } catch (\Exception $e) {
             return response()->json(['message' => 'Fout bij het verwijderen van de auto: '.$e->getMessage()], 500);
