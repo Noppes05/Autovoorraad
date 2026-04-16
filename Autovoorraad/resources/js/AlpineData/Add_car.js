@@ -71,9 +71,13 @@ export function add_car() {
         },
         async submitConceptCar() {
             try{
-                const response = await this.submitCar('/api/AddConceptcar');
-                console.log('Response status:', response);
-                    if(response === 201){
+                const result = await this.submitCar('/api/AddConceptcar');
+                console.log('Response status:', result?.status);
+                    if(result?.redirected && result?.url){
+                        window.location.assign(result.url);
+                        return;
+                    }
+                    if(result?.ok){
                         this.isConceptSaved = true;
                         toast.success('Concept auto succesvol opgeslagen');
                     } 
@@ -95,19 +99,20 @@ export function add_car() {
         },
         async submitBeschikbaarCar() {
             try{
-                const response = await this.submitCar('/api/Addcar');
-                if(response === 201){
+                const result = await this.submitCar('/api/Addcar');
+                if(result?.redirected && result?.url){
+                    window.location.assign(result.url);
+                    return;
+                }
+
+                if(result?.ok){
                     toast.success('Auto succesvol gepubliceerd');
                     this.isPublished = true;
                 } else {
                     toast.error('Fout bij het publiceren van de auto');
                     this.isPublished = false;
-                if (!response.ok) {
-                    toast.error('Fout bij opslaan')
-                    return
                 }
             }
-        }
             catch (error) {
                 console.error('Fout bij publiceren auto:', error);
             }
@@ -136,13 +141,21 @@ export function add_car() {
                     body: formdata
                 })
 
-                if (!response.ok) {
-                    return response.status;
-                }
-                return response.status;
+                return {
+                    ok: response.ok,
+                    status: response.status,
+                    redirected: response.redirected,
+                    url: response.url
+                };
 
             } catch (e) {
                 toast.error('Server fout')
+                return {
+                    ok: false,
+                    status: 500,
+                    redirected: false,
+                    url: null
+                };
             }
         }
     }

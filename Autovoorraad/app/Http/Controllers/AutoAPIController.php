@@ -83,7 +83,7 @@ class AutoAPIController extends Controller
             return response()->json(['message' => 'Fout bij het toevoegen van de auto: '.$e->getMessage()], 500);
         }
 
-        return response()->json(['message' => 'Auto succesvol toegevoegd', 'auto_id' => $auto->id], 201);
+        return redirect()->route('auto.detail', ['id' => $auto->id])->with('success', 'Auto succesvol opgeslagen als beschikbaar');
     }
 
     /**
