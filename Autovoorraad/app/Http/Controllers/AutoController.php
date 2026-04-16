@@ -103,32 +103,4 @@ class AutoController extends Controller
             'initialFotos' => $initialFotos,
         ]);
     }
-
-    /**
-     * Fetch car data from RDW API by license plate.
-     *
-     * @return JsonResponse
-     */
-    public function fetchFromRdw(Request $request)
-    {
-        $request->validate([
-            'kenteken' => 'required|string|max:10',
-        ]);
-
-        $vehicleData = FetchRdw::run($request->input('kenteken'));
-
-
-        if (! $vehicleData) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Geen voertuiggegevens gevonden voor dit kenteken.',
-            ], 404);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => $vehicleData,
-        ]);
-    }
-    
 }
