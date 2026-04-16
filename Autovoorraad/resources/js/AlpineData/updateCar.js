@@ -15,6 +15,7 @@ export function updateCar(initialAuto = {}, initialFotos = []) {
         status: 'basisinformatie',
         isSaved: false,
         isSaving: false,
+        save_loading:false,
         init() {
             console.log('Auto data loaded for editing:', initialAuto);
             console.log('Initial photos loaded for editing:', initialFotos);
@@ -57,6 +58,7 @@ export function updateCar(initialAuto = {}, initialFotos = []) {
         async saveUpdate() {
             this.isSaving = true;
             this.isSaved = false;
+            this.save_loading = true;
 
             const formData = new FormData();
             formData.append('kenteken', this.kenteken);
@@ -96,6 +98,7 @@ export function updateCar(initialAuto = {}, initialFotos = []) {
             } catch (error) {
                 toast.error(error instanceof Error ? error.message : 'Bijwerken mislukt.');
             } finally {
+                this.save_loading = false;
                 this.isSaving = false;
             }
         },
