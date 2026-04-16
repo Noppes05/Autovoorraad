@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\StoreNewAuto;
+use App\Actions\UpdateCar;
 use App\Actions\SyncAutoFotos;
 use App\Enums\Auto_status;
 use App\Models\auto;
@@ -68,35 +69,7 @@ class AutoAPIController extends Controller
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
 
-        $request->validate([
-            'kenteken' => 'required|string|max:255',
-            'merk' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'bouwjaar' => 'required|integer',
-            'beschrijving' => 'nullable|string',
-            'prijs' => 'nullable|numeric',
-            'km_stand' => 'nullable|integer',
-            'status' => 'required|in:beschikbaar,concept,verkocht',
-            'replace_fotos' => 'nullable|boolean',
-            'fotos' => 'required_if:replace_fotos,1|array|min:1',
-            'fotos.*' => 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
-        ]);
-
-        $auto->update([
-            'kenteken' => $request->input('kenteken'),
-            'merk' => $request->input('merk'),
-            'model' => $request->input('model'),
-            'bouwjaar' => $request->input('bouwjaar'),
-            'beschrijving' => $request->input('beschrijving'),
-            'prijs' => $request->input('prijs'),
-            'km_stand' => $request->input('km_stand'),
-            'status' => $request->input('status'),
-        ]);
-
-        if ($request->boolean('replace_fotos')) {
-            $fotos = $request->file('fotos', []);
-            SyncAutoFotos::run($auto, $fotos, true);
-        }
+        UpdateCar::run($request, $auto);
 
         return response()->json([
             'message' => 'Auto succesvol bijgewerkt.',
