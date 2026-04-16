@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\FetchRdw;
 use App\Models\Auto;
 use App\Services\RdWService;
 use Illuminate\Http\JsonResponse;
@@ -101,66 +102,5 @@ class AutoController extends Controller
             'autoId' => $auto->id,
             'initialFotos' => $initialFotos,
         ]);
-    }
-
-    /**
-     * Fetch car data from RDW API by license plate.
-     *
-     * @return JsonResponse
-     */
-    public function fetchFromRdw(Request $request)
-    {
-        $request->validate([
-            'kenteken' => 'required|string|max:10',
-        ]);
-
-        $kenteken = $request->input('kenteken');
-
-        $vehicleData = RdwApiRequest::make()
-        ->setLicenseplate($kenteken)->setLanguage('nl')
-        ->setEndpoints([Endpoints::VEHICLE])
-        ->fetch();
-
-        $vehicleData = $this->formatVehicleData($vehicleData->response['Voertuigen'] ?? null);
-
-
-        if (! $vehicleData) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Geen voertuiggegevens gevonden voor dit kenteken.',
-            ], 404);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => $vehicleData,
-        ]);
-    }
-      protected function formatVehicleData(array $data): array
-    {
-        return [
-            'kenteken' => $data['kenteken'] ?? null,
-            'merk' => $data['merk'] ?? null,
-            'model' => $data['handelsbenaming'] ?? null,
-            'bouwjaar' => $this->extractBouwjaar($data['datum_eerste_tenaamstelling_in_nederland']) ?? null,
-            'kilometer_stand' => $data['kilometerstand'] ?? null,
-        ];
-    }
-
-       /**
-     * Extract bouwjaar from registration date.
-     */
-    protected function extractBouwjaar(?string $date): ?string
-    {
-        if (! $date) {
-            return null;
-        }
-
-        // RDW dates are in format YYYYMMDD or YYYY-MM-DD
-        if (preg_match('/^(\d{4})/', $date, $matches)) {
-            return $matches[1];
-        }
-
-        return $date;
     }
 }

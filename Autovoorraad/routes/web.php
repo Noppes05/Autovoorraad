@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AutoAPIController;
+use App\Http\Controllers\AutoAPIGetController;
 use App\Http\Controllers\AutoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    
     Route::get('/auto-toevoegen', [AutoController::class, 'AutoToevoegen'])->name('auto.toevoegen');
     Route::get('/auto/{id}', [AutoController::class, 'details'])->name('auto.detail');
     Route::get('/auto/{id}/bewerken', [AutoController::class, 'edit'])->name('auto.edit');
@@ -25,16 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
-Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
-    Route::post('/api/rdw/kenteken', [AutoController::class, 'fetchFromRdw'])->name('rdw.kenteken');
-    Route::post('/api/AddConceptcar', [AutoAPIController::class, 'store_concept'])->name('api.addconceptcar');
-    Route::post('/api/Addcar', [AutoAPIController::class, 'store_beschikbaar'])->name('api.addcar');
-    Route::post('/api/autos/{id}/update', [AutoAPIController::class, 'update_car'])->name('api.autos.update');
-    Route::get('api/autos', [AutoAPIController::class, 'index'])->name('api.autos');
-    Route::get('api/autos/{id}', [AutoAPIController::class, 'show'])->name('api.autos.show');
-    Route::post('api/autos/{id}/fotos', [AutoAPIController::class, 'update_fotos'])->name('api.autos.fotos.update');
-    Route::post('/api/autos/delete/', [AutoAPIController::class, 'destroy'])->name('api.autos.delete');
-});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
