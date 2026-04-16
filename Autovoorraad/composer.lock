@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29e297f711db6fae7e35cc13c44c486a",
+    "content-hash": "e93151a944dae17aa775074222c5a143",
     "packages": [
         {
             "name": "brick/math",
@@ -1052,6 +1052,62 @@
                 }
             ],
             "time": "2025-08-22T14:27:06+00:00"
+        },
+        {
+            "name": "jdkweb/rdw-api",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jdkweb/rdw-api.git",
+                "reference": "bfe5c7ff6418659cf3b3ae2ac7d9505cf80c70ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jdkweb/rdw-api/zipball/bfe5c7ff6418659cf3b3ae2ac7d9505cf80c70ce",
+                "reference": "bfe5c7ff6418659cf3b3ae2ac7d9505cf80c70ce",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5.8|^7.4.5",
+                "php": ">=8.1",
+                "spatie/array-to-xml": "^3.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Jdkweb\\RdwApi\\RdwServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jdkweb\\RdwApi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jasper",
+                    "email": "jasper@jdkweb.nl"
+                }
+            ],
+            "description": "Wrapper for RDW API for getting vehicle information from opendata.rdw.nl",
+            "keywords": [
+                "api",
+                "laravel",
+                "overheid.io",
+                "php",
+                "rdw"
+            ],
+            "support": {
+                "issues": "https://github.com/jdkweb/rdw-api/issues",
+                "source": "https://github.com/jdkweb/rdw-api/tree/v1.2.2"
+            },
+            "time": "2026-01-14T17:30:23+00:00"
         },
         {
             "name": "laravel/framework",
@@ -3360,6 +3416,74 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.2"
             },
             "time": "2025-12-14T04:43:48+00:00"
+        },
+        {
+            "name": "spatie/array-to-xml",
+            "version": "3.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/array-to-xml.git",
+                "reference": "88b2f3852a922dd73177a68938f8eb2ec70c7224"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/88b2f3852a922dd73177a68938f8eb2ec70c7224",
+                "reference": "88b2f3852a922dd73177a68938f8eb2ec70c7224",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "pestphp/pest": "^1.21",
+                "spatie/pest-plugin-snapshots": "^1.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\ArrayToXml\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://freek.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Convert an array to xml",
+            "homepage": "https://github.com/spatie/array-to-xml",
+            "keywords": [
+                "array",
+                "convert",
+                "xml"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/array-to-xml/tree/3.4.4"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-15T09:00:41+00:00"
         },
         {
             "name": "symfony/clock",

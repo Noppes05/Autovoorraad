@@ -6,6 +6,11 @@ use App\Models\Auto;
 use App\Services\RdWService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Jdkweb\RdwApi\Controllers\RdwApiRequest;
+use Jdkweb\RdwApi\Enums\Endpoints;
+use Jdkweb\RdwApi\Enums\Interface\OutputFormat;
+use Jdkweb\RdwApi\Enums\OutputFormats;
+use phpDocumentor\Reflection\Types\This;
 
 class AutoController extends Controller
 {
@@ -103,7 +108,7 @@ class AutoController extends Controller
      *
      * @return JsonResponse
      */
-    public function fetchFromRdw(Request $request, RdWService $rdwService)
+    public function fetchFromRdw(Request $request)
     {
         $request->validate([
             'kenteken' => 'required|string|max:10',
@@ -111,7 +116,13 @@ class AutoController extends Controller
 
         $kenteken = $request->input('kenteken');
 
-        $vehicleData = $rdwService->getVehicleData($kenteken);
+        $vehicleData = RdwApiRequest::make()
+        ->setLicenseplate($kenteken)->setLanguage('nl')
+        ->setEndpoints([Endpoints::VEHICLE])
+        ->fetch();
+
+        $vehicleData = $this->formatVehicleData($vehicleData->response['Voertuigen'] ?? null);
+
 
         if (! $vehicleData) {
             return response()->json([
@@ -124,5 +135,32 @@ class AutoController extends Controller
             'success' => true,
             'data' => $vehicleData,
         ]);
+    }
+      protected function formatVehicleData(array $data): array
+    {
+        return [
+            'kenteken' => $data['kenteken'] ?? null,
+            'merk' => $data['merk'] ?? null,
+            'model' => $data['handelsbenaming'] ?? null,
+            'bouwjaar' => $this->extractBouwjaar($data['datum_eerste_tenaamstelling_in_nederland']) ?? null,
+            'kilometer_stand' => $data['kilometerstand'] ?? null,
+        ];
+    }
+
+       /**
+     * Extract bouwjaar from registration date.
+     */
+    protected function extractBouwjaar(?string $date): ?string
+    {
+        if (! $date) {
+            return null;
+        }
+
+        // RDW dates are in format YYYYMMDD or YYYY-MM-DD
+        if (preg_match('/^(\d{4})/', $date, $matches)) {
+            return $matches[1];
+        }
+
+        return $date;
     }
 }
