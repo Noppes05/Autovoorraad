@@ -1,21 +1,22 @@
 <x-app-layout>
-    <div class="p-10" x-data="add_car">
-        <div class="w-full flex items-center justify-between mb-4">
+    <div class="p-4 md:p-10" x-data="add_car">
+        <div class="md:w-full  flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-center md:justify-between mb-4">
             <div>
-                <h1 class="text-4xl font-serif font-bold text-gray-800">Auto Toevoegen</h1>
+                <h1 class="text-2xl md:text-4xl font-serif font-bold text-gray-800">Auto Toevoegen</h1>
                 <p class="text-md">Voeg een nieuw voertuig toe aan de digitale showroom.</p>
             </div>
-            <div class="flex">
+            <div class="flex self-start gap-4 md:gap-0 md:flex-row flex-col">
                 <a x-on:click="submitConceptCar()" class="ml-4 inline-flex items-center px-4 py-3 border border-black-pearl-950 hover:bg-black-pearl-950 hover:text-white rounded-md font-semibold text-xs text-black-pearl-950 uppercase tracking-widest  focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                    Concept Opslaan</a>
-                    <template x-transition x-if="this.isConceptSaved">
+                    Concept Opslaan
+                    <template x-transition x-if="isConceptSaved">
                          <svg class="w-5 h-5 text-green-400 shrink-0 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
                     </template>
+                </a>
                 <a x-on:click="submitBeschikbaarCar()" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
                     Opslaan & Publiceren
-                    <template x-transition x-if="this.isPublished">
+                    <template x-transition x-if="isPublished">
                          <svg class="w-5 h-5 text-fg-success shrink-0 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
@@ -23,9 +24,8 @@
                 </a>
             </div>
         </div>
-        <template x-if="status === 'basisinformatie'" x-transition>
-            <div>
-            <div class="p-4 bg-white rounded mb-4">
+        <div x-show="status === 'basisinformatie'" x-transition>
+            <div class="p-2 md:p-4 bg-white rounded mb-4">
                 <div class="flex items-center gap-4 mb-8">
                     <div class="bg-blaze-orange-600 rounded-full w-1.5 h-8 inline-block"></div>
                     <h2 class=" text-2xl font-semibold font-serif inline leading-none">Basisinformatie</h2>
@@ -44,35 +44,35 @@
                     <p class="mt-2 text-[0.7rem] text-gray-500">RDW Gegevens worden automatisch opgehaald na invoer.</p>
                     <p x-text="rdwData_error" class=" text-[0.6rem] text-red-400 "></p>
                 </div>
-                <div class="grid grid-cols-2 grid-rows-3 w-full gap-y-5 gap-x-10 mt-10">
+                <div class="grid md:grid-cols-2 grid-rows-6 md:grid-rows-3 w-full gap-y-5 gap-x-10 mt-10">
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">Merk</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm text-gray-800">
-                            <input type="text" tabindex="2" x-model="merk" class="outline-none w-full placeholder:font-semibold" placeholder="Volkswagen, Audi, etc.">
+                            <input type="text" tabindex="2" x-model="merk" class="outline-none w-min md:w-full placeholder:font-semibold" placeholder="Volkswagen, Audi, etc.">
                         </div>
                     </div>
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">model</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm  text-gray-800">
-                            <input type="text" tabindex="3" x-model="model" class="outline-none w-full placeholder:font-semibold" placeholder="Bijv Golf, A3, etc.">
+                            <input type="text" tabindex="3" x-model="model" class="outline-none w-min md:w-full placeholder:font-semibold" placeholder="Bijv Golf, A3, etc.">
                         </div>
                     </div>
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">bouwjaar</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm  text-gray-800">
-                            <input type="text" tabindex="4" x-model="bouwjaar" class="outline-none w-full placeholder:font-semibold" placeholder="2021, 2020, etc.">
+                            <input type="number" tabindex="4" x-model="bouwjaar" class="outline-nonew-min md:w-full placeholder:font-semibold" placeholder="2021, 2020, etc.">
                         </div>
                     </div>
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">prijs (€)</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm  text-gray-800">
-                            <input type="text" tabindex="5" x-model="prijs" class="outline-none w-full placeholder:font-semibold" placeholder="0,00">
+                            <input type="number" tabindex="5" x-model="prijs" class="outline-none w-min md:w-full placeholder:font-semibold" placeholder="0,00">
                         </div>
                     </div>
                     <div>
                         <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">km stand</p>
                         <div class="rounded bg-gray-100 p-3 uppercase text-sm  text-gray-800">
-                            <input type="text" tabindex="6" x-model="km_stand" class="outline-none w-full placeholder:font-semibold" placeholder="0 km">
+                            <input type="number" tabindex="6" x-model="km_stand" class="outline-none w-min md:w-full placeholder:font-semibold" placeholder="0 km">
                         </div>
                     </div>
                 </div>
@@ -102,54 +102,31 @@
                     </a>
                 </div>
                 <div  class="flex gap-6">
-                    <template x-for="(foto, index) in fotos" :key="index">
+                    <template x-for="(foto, index) in fotos.slice(0, 5)" :key="index">
                         <div 
                              class="relative rounded bg-gray-100 h-48 w-1/5 flex items-center justify-center">
                             <img :src="URL.createObjectURL(foto)" :alt="foto.name" class="object-cover h-full w-full rounded">
                         </div>
                     </template>
                 </div>
-                
             </div>
-         </template>
-         <template x-if="status === 'foto_toevoegen'" x-transition>
-            <div class="p-4">
-                <div class="w-full flex items-center justify-between mb-4">
-                    <div>
-                        <h1 class="text-4xl font-serif font-bold text-gray-800">Foto's beheren</h1>
-                        <p class="text-md">Voeg foto’s toe voor de auto</p>
-                    </div>
-                    <div class="flex">
-                        <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                            Opslaan foto's en terug naar overzicht
-                        </a>
-                    </div>
+        </div>
+
+        <div x-show="status === 'foto_toevoegen'" x-transition @photos-updated="updateFotos($event.detail)">
+            <div class="w-full flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-4xl font-serif font-bold text-gray-800">Foto's beheren</h1>
+                    <p class="text-md">Voeg foto’s toe voor de auto</p>
                 </div>
-                <div class="flex gap-4">
-                    <template x-for="(foto, index) in fotos" :key="index">
-                        <div draggable="true"
-                            @dragstart="startDrag(index)"
-                            @dragover.prevent="dragOver(index)"
-                            @drop="drop(index)"
-                            @dragend="endDrag"
-                            :class="{
-                                    'opacity-50': draggedIndex === index,
-                                    'border-l-2 border-blaze-orange-600': overIndex === index
-                                }"
-                             class="relative rounded group bg-gray-100 h-48 w-1/5 flex items-center overflow-hidden justify-center">
-                            <img :src="URL.createObjectURL(foto)" :alt="foto.name" class="object-cover group-hover:scale-110 h-full w-full rounded transition-all duration-150">
-                            <div class="absolute hidden  bg-black/30 z-10 top-0 left-0 group-hover:flex transition-all justify-center items-center w-full h-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="cursor-pointer" x-on:click="deletePicture(index)" width="52" height="52" viewBox="0 0 52 52" fill="none">
-                                    <path d="M41.1668 8.66667H33.5835L31.4168 6.5H20.5835L18.4168 8.66667H10.8335V13H41.1668M13.0002 41.1667C13.0002 42.3159 13.4567 43.4181 14.2694 44.2308C15.082 45.0435 16.1842 45.5 17.3335 45.5H34.6668C35.8161 45.5 36.9183 45.0435 37.731 44.2308C38.5436 43.4181 39.0002 42.3159 39.0002 41.1667V15.1667H13.0002V41.1667Z" fill="#FC6A00"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </template>
-                    <div x-on:click="OpenFotoKiezen()" class="w-1/5 h-48 rounded bg-black-pearl-950 border cursor-pointer border-blaze-orange-600 text-blaze-orange-600 flex justify-center items-center">+
-                    <input type="file" accept="image/*" multiple  @change="AddFoto" hidden id="fileinput" x-model='fileInput'></div>
+                <div class="flex w-min">
+                    <a x-on:click="status = 'basisinformatie'" class="ml-4 inline-flex items-center px-4 py-3 w-full md:w-max bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
+                        Opslaan foto's en <br>
+                        terug naar overzicht
+                    </a>
                 </div>
             </div>
-         </template>
-    </div>
+            <x-photo-manager />
+        </div>
+        </div>
     
 </x-app-layout>

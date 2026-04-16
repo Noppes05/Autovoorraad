@@ -1,3 +1,5 @@
+import { toast } from "../utils/toast";
+
 export function add_car() {
     return {
         kenteken: '',
@@ -5,25 +7,21 @@ export function add_car() {
         model: '',
         bouwjaar: '',
         km_stand: '',
-        prijs:'',
+        prijs: '',
         beschrijving: '',
-        fotos: [],
-        rdwData_error:'',
-        status:'basisinformatie',
-        addeditem: null,
-        draggedIndex: null,
-        overIndex: null,
-        fileInput: null,
-        csrf_token: null,
-        isPublished: false,
-        rdwData_loading: false,
+        fotos: [], // 👈 blijft!
+        status: 'basisinformatie',
         isConceptSaved: false,
+        isPublished: false,
+        rdwData_error:'',
+        rdwData_loading:false,
+
         async init() {
-            this.csrf_token = await fetch('/sanctum/csrf-cookie', {
+            await fetch('/sanctum/csrf-cookie', {
                 credentials: 'include',
             });
         },
-       handleKentekenInput() {
+        handleKentekenInput() {
            this.kenteken = this.kenteken.replace(/\s/g, '').toUpperCase().replace('-','');
            this.kenteken = this.kenteken.replace(/[^A-Z0-9-]/g, '');
            console.log('Kenteken ingevoerd:', this.kenteken);
@@ -49,7 +47,7 @@ export function add_car() {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data['data']);
-                    if (data['data'] !={}) {
+                    if (data['data'] !=undefined) {
                         console.log('RDW Data gevonden:', data['data']);
                         this.merk = data['data']["merk"];
                         this.model = data['data']["model"];
@@ -67,106 +65,85 @@ export function add_car() {
                     console.error('Error fetching data:', error);
                 });
         } ,
+
+        updateFotos(fotos) {
+            this.fotos = fotos
+        },
+        async submitConceptCar() {
+            try{
+                const response = await this.submitCar('/api/AddConceptcar');
+                console.log('Response status:', response);
+                    if(response === 201){
+                        this.isConceptSaved = true;
+                        toast.success('Concept auto succesvol opgeslagen');
+                    } 
+                    else {
+                        this.isConceptSaved = false;
+                        toast.error('Fout bij het opslaan van de concept auto');
+                        }
+                    }
+                catch (error) {
+                    console.error('Fout bij opslaan concept auto:', error);
+                }
+                    
+        },
         getCookie(name) {
             return document.cookie
                 .split('; ')
                 .find(row => row.startsWith(name + '='))
                 ?.split('=')[1];
-    },
-        // Drag and Drop functies
-        startDrag(index) {
-            this.draggedIndex = index;
-        },
-
-        dragOver(index) {
-            this.overIndex = index;
-        },
-
-        drop(index) {
-            const movedItem = this.fotos[this.draggedIndex];
-
-            // verwijder item
-            this.fotos.splice(this.draggedIndex, 1);
-
-            // voeg opnieuw in op nieuwe plek
-            this.fotos.splice(index, 0, movedItem);
-
-            this.reset();
-        },
-
-        endDrag() {
-            this.reset();
-        },
-        reset() {
-            this.draggedIndex = null;
-            this.overIndex = null;
-        },
-        deletePicture(index) {
-            this.fotos.splice(index, 1);
-        },
-        OpenFotoKiezen(){
-            const fileinput = document.getElementById('fileinput');
-            fileinput.click();
-        },
-        AddFoto(event){
-            const files = event.target.files;
-            // Controleer of er bestanden zijn geselecteerd
-            if (files === 0) {
-                console.warn('Geen bestanden geselecteerd.');
-                return;
-            }   
-            //toevoegen van de geselecteerde foto's aan de foto array en deze weergeven in de interface
-            for (let i = 0; i < files.length; i++) {
-                console.log('Bestand toegevoegd:', fileinput.files[i].name);
-                const file = fileinput.files[i];
-                this.fotos.push(file)
-                console.log('Huidige foto', this.fotos);
-            }
-        },
-        async submitConceptCar() {
-            await this.submitCar('/api/AddConceptcar');
-            this.isConceptSaved = true;
         },
         async submitBeschikbaarCar() {
-            await this.submitCar('/api/Addcar');
-              this.isPublished = true;
+            try{
+                const response = await this.submitCar('/api/Addcar');
+                if(response === 201){
+                    toast.success('Auto succesvol gepubliceerd');
+                    this.isPublished = true;
+                } else {
+                    toast.error('Fout bij het publiceren van de auto');
+                    this.isPublished = false;
+                if (!response.ok) {
+                    toast.error('Fout bij opslaan')
+                    return
+                }
+            }
+        }
+            catch (error) {
+                console.error('Fout bij publiceren auto:', error);
+            }
         },
-
         async submitCar(url) {
-            console.log(this.fotos);
-            const formdata = new FormData();
-            formdata.append('kenteken', this.kenteken);
-            formdata.append('merk', this.merk);
-            formdata.append('model', this.model);
-            formdata.append('bouwjaar', this.bouwjaar);
-            formdata.append('km_stand', this.km_stand);
-            formdata.append('prijs', this.prijs);
-            formdata.append('beschrijving', this.beschrijving);
+            const formdata = new FormData()
+            formdata.append('kenteken', this.kenteken)
+            formdata.append('merk', this.merk)
+            formdata.append('model', this.model)
+            formdata.append('bouwjaar', this.bouwjaar)
+            formdata.append('km_stand', this.km_stand)
+            formdata.append('prijs', this.prijs)
+            formdata.append('beschrijving', this.beschrijving)
+            console.log('fotos', this.fotos);
             this.fotos.forEach((foto, index) => {
                 formdata.append(`fotos[${index}]`, foto);
             });
-            
-            console.log('Te verzenden gegevens:', formdata);
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers: {
-                            'X-XSRF-TOKEN': decodeURIComponent(this.getCookie('XSRF-TOKEN'))
-                        },
-                        body: formdata,
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'X-XSRF-TOKEN': decodeURIComponent(this.getCookie('XSRF-TOKEN'))
                     },
-                        
-                    );
-                    if (!response.ok) {
-                        throw new Error(`Netwerkfout: ${response.statusText}`);
-                    }
-                    const data = await response.json();
-                    console.log('Response van server:', data);
+                    body: formdata
+                })
+
+                if (!response.ok) {
+                    return response.status;
+                }
+                return response.status;
+
+            } catch (e) {
+                toast.error('Server fout')
+            }
         }
-        catch (error) { 
-                       console.error('Fout bij verzenden:', error);
-        }
-    }
     }
 }

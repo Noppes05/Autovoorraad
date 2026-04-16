@@ -21,7 +21,6 @@ return [
 
     'allowed_origins' => ['http://Autovoorraad.127.0.0.1.nip.io'],
 
-
     'allowed_headers' => ['*'],
 
     'exposed_headers' => [],

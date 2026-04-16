@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import '@splidejs/splide/css';
 
 @theme{
     --font-sans: 'Inter', sans-serif;
@@ -30,4 +30,8 @@
     --color-blaze-orange-800: #a13c0b;
     --color-blaze-orange-900: #82330c;
     --color-blaze-orange-950: #461704;
+}
+
+[x-cloak] {
+    display: none !important;
 }
