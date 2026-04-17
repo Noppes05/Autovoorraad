@@ -54,7 +54,7 @@ Door het ontbreken van filtering op tenant/user kan data van andere tenants zich
 ### 💻 Code-aanpassing
 
 bij alle acties word er gecheckt of de ingelogde user de user is van de auto die hij wil bekijken/aanpassen.
-bijvoorbeeld in de `App/Http/Controller/AutoController.php`: ```
+bijvoorbeeld in de `App/Http/Controller/AutoController.php`:
 ```php
 // Voeg hier je relevante code snippet toe
 
@@ -64,6 +64,7 @@ bijvoorbeeld in de `App/Http/Controller/AutoController.php`: ```
                 $query->orderBy('volgorde_nummer');
             }])
             ->firstOrFail();
+```
 
 
 ## Getting Started
