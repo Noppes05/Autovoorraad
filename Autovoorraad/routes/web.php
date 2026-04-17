@@ -25,6 +25,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/auto/{id}/bewerken', [AutoController::class, 'edit'])->name('auto.edit');
     Route::get('/auto/{id}/fotos', [AutoController::class, 'manageFotos'])->name('auto.fotos.manage');
 
+    Route::get('/settings', function() {
+        return view('Website_Settings');
+    })->name('Website settings');
+
 });
 
 
