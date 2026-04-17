@@ -43,6 +43,7 @@ class AutoAPIGetController extends Controller
      */
     public function show(Request $request, $id)
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt opgehaald, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         $auto = auto::where('id', $id)
             ->where('user_id', $request->user()->id)
             ->with(['fotos' => function ($query) {
@@ -59,6 +60,7 @@ class AutoAPIGetController extends Controller
      */
     public function index()
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat alleen auto's worden opgehaald die toebehoren aan de ingelogde gebruiker.
         $autos = auto::where('user_id', request()->user()->id)
             ->with(['fotos' => function ($query) {
                 $query->orderBy('volgorde_nummer');

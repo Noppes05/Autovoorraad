@@ -19,6 +19,7 @@ class AutoAPIController extends Controller
      */
     public function update_fotos(Request $request, $id)
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt bijgewerkt, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         $auto = auto::where('id', $id)
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
@@ -38,6 +39,7 @@ class AutoAPIController extends Controller
      */
     public function update_car(Request $request, $id)
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt bijgewerkt, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         $auto = auto::where('id', $id)
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
@@ -92,6 +94,7 @@ class AutoAPIController extends Controller
     public function destroy(Request $request)
     {
         $carId = $request->input('car')['id'];
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt verwijderd, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         $car = auto::where('id', $carId)->where('user_id', $request->user()->id)->first();
         if (! $car) {
             return response()->json(['message' => 'Auto niet gevonden of je hebt geen toestemming om deze auto te verwijderen'], 404);

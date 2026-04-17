@@ -52,7 +52,7 @@ class UpdateCar
             'fotos' => 'required_if:replace_fotos,1|array|min:1',
             'fotos.*' => 'image|mimes:jpeg,webp,png,jpg,gif|max:2048',
         ]);
-
+// T1- Threat tenant Data leak: Zorg ervoor dat er geen andere auto bestaat met hetzelfde kenteken en dezelfde gebruiker, behalve de auto die wordt bijgewerkt.
         $existingAuto = Auto::where('kenteken', $request->input('kenteken'))
             ->where('user_id', $request->user()->id)
             ->where('id', '!=', $auto->id)

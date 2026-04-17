@@ -28,6 +28,7 @@ class AutoController extends Controller
      */
     public function details($id)
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt opgehaald, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         $auto = Auto::where('id', $id)
             ->where('user_id', request()->user()->id)
             ->with(['fotos' => function ($query) {
@@ -55,6 +56,7 @@ class AutoController extends Controller
      */
     public function edit($id)
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt opgehaald, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         $auto = Auto::where('id', $id)
             ->where('user_id', request()->user()->id)
             ->with(['fotos' => function ($query) {
@@ -81,6 +83,7 @@ class AutoController extends Controller
     // Show the page to manage photos of a car.
     public function manageFotos($id)
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt opgehaald, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         $auto = Auto::where('id', $id)
             ->where('user_id', request()->user()->id)
             ->with(['fotos' => function ($query) {

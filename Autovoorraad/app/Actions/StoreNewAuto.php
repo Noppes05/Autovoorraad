@@ -49,6 +49,7 @@ class StoreNewAuto
 
     private function findConceptAuto(Request $request): ?Auto
     {
+        // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt opgehaald, daadwerkelijk toebehoort aan de ingelogde gebruiker.
         return Auto::where('user_id', $request->user()->id)
             ->where('kenteken', $request->input('kenteken'))
             ->where('status', Auto_status::CONCEPT)
