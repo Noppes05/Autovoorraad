@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UpdateWebsiteSettings;
 use Illuminate\Http\Request;
 
 class WebsiteSettingsController extends Controller
@@ -47,44 +48,8 @@ class WebsiteSettingsController extends Controller
     {
         $user = $request->user();
 
-        $validated = $request->validate([
-            'naam' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'logo' => 'nullable|string|max:255',
-            'herofoto' => 'nullable|string|max:255',
-            'hero_beschrijving' => 'nullable|string',
-            'telefoonnummer' => 'nullable|string|max:255',
-            'plaats' => 'nullable|string|max:255',
-            'adres' => 'nullable|string|max:255',
-            'postcode' => 'nullable|string|max:255',
-        ]);
+       $result =  UpdateWebsiteSettings::run($request, $user);
 
-        $user->name = $validated['naam'];
-        $user->email = $validated['email'];
-        $user->logo = $validated['logo'] ?? $user->logo;
-        $user->hero_foto = $validated['herofoto'] ?? $user->hero_foto;
-        $user->hero_beschrijving = $validated['hero_beschrijving'] ?? $user->hero_beschrijving;
-        $user->telefoonnummer = $validated['telefoonnummer'] ?? $user->telefoonnummer;
-        $user->plaats = $validated['plaats'] ?? $user->plaats;
-        $user->adres = $validated['adres'] ?? $user->adres;
-        $user->postcode = $validated['postcode'] ?? $user->postcode;
-
-        $user->save();
-
-        return response()->json([
-            'success' => true,
-            'settings' => [
-                'naam' => $user->name,
-                'logo' => $user->logo,
-                'kleur' => $user->kleur ?? null,
-                'herofoto' => $user->hero_foto,
-                'hero_beschrijving' => $user->hero_beschrijving,
-                'telefoonnummer' => $user->telefoonnummer,
-                'Email' => $user->email,
-                'plaats' => $user->plaats,
-                'adres' => $user->adres,
-                'postcode' => $user->postcode,
-            ],
-        ]);
+        return response()->json($result);
     }
 }

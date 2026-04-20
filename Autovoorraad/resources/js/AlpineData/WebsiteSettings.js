@@ -3,9 +3,9 @@ import { toast } from "../utils/toast";
 export function websiteSettings(user='') {
     return {
         naam: '',
-        logo:  '',
+        logo:  null,
         kleur: '#000000',
-        herofoto:  '',
+        herofoto:  null,
         hero_beschrijving:  '',
         telefoonnummer:  '',
         email:  '',
@@ -36,9 +36,9 @@ export function websiteSettings(user='') {
                 const data = await response.json();
                 const settings = data.settings || {};
                 this.naam = settings.naam || '';
-                this.logo = settings.logo || '';
+                this.logo = settings.logo || null;
                 this.kleur = settings.kleur || '#000000';
-                this.herofoto = settings.herofoto || '';
+                this.herofoto = settings.herofoto || null;
                 this.hero_beschrijving = settings.hero_beschrijving || '';
                 this.telefoonnummer = settings.telefoonnummer || '';
                 this.email = settings.Email || '';
@@ -57,7 +57,19 @@ export function websiteSettings(user='') {
                 .find((row) => row.startsWith(name + '='))
                 ?.split('=')[1];
         },
+        getImagePreview(image, fallback) {
+            if (!image) {
+                return fallback;
+            }
+
+            if (typeof image === 'string') {
+                return image;
+            }
+
+            return URL.createObjectURL(image);
+        },
         async updateSettings() {
+            console.log(this.logo)
             const csrf = await fetch('/sanctum/csrf-cookie', {
                 method: 'GET',
                 credentials: 'include',
@@ -67,9 +79,13 @@ export function websiteSettings(user='') {
             }
             var formData = new FormData();
             formData.append('naam', this.naam);
-            formData.append('logo', this.logo);
+            if (this.logo instanceof File) {
+                formData.append('logo', this.logo);
+            }
             formData.append('kleur', this.kleur);
-            formData.append('herofoto', this.herofoto);
+            if (this.herofoto instanceof File) {
+                formData.append('herofoto', this.herofoto);
+            }
             formData.append('hero_beschrijving', this.hero_beschrijving);
             formData.append('telefoonnummer', this.telefoonnummer);
             formData.append('email', this.email);
@@ -96,6 +112,21 @@ export function websiteSettings(user='') {
                 const message = error instanceof Error ? error.message : 'Failed to update website settings';
                 toast.error(message);
             }
+        },
+        addlogo(event){
+            const file = event.target.files[0];
+            console.log(file)
+            if (file) {
+                this.logo = file;
+            }
+        },
+        addHero(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.herofoto = file;
+            }
         }
+
+        
     }
 }
