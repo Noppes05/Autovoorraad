@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AutoAPIController;
 use App\Http\Controllers\AutoAPIGetController;
+use App\Http\Controllers\WebsiteSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
@@ -14,4 +15,7 @@ Route::middleware('auth:sanctum', 'throttle:30,1')->group(function () {
     Route::post('/autos/{id}/update', [AutoAPIController::class, 'update_car'])->name('api.autos.update');
     Route::post('/autos/{id}/fotos', [AutoAPIController::class, 'update_fotos'])->name('api.autos.fotos.update');
     Route::post('/autos/delete', [AutoAPIController::class, 'destroy'])->name('api.autos.delete');
+
+    Route::get('/website-settings', [WebsiteSettingsController::class, 'get'])->name('api.website-settings.get');
+    Route::post('/website-settings', [WebsiteSettingsController::class, 'update'])->name('api.website-settings.update');
 });
