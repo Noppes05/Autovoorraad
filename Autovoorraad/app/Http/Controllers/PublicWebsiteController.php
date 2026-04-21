@@ -29,6 +29,8 @@ class PublicWebsiteController extends Controller
             'plaats' => $tenant->plaats,
             'adres' => $tenant->adres,
             'postcode' => $tenant->postcode,
+            'naam'=> $tenant->name,
+            'kleur' => $tenant->kleur,
         ];
     }
 }
