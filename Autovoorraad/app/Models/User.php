@@ -16,6 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
     'email',
     'password',
     'logo',
+    'kleur',
     'telefoonnummer',
     'plaats',
     'adres',
