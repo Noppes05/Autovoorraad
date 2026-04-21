@@ -3,6 +3,7 @@
 use App\Actions\UpdateWebsiteSettings;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 it('updates website settings including logo and hero photo', function () {
     Storage::fake('public');
@@ -100,3 +101,24 @@ it('keeps optional settings unchanged when only required fields are provided', f
     expect($user->logo)->toBe('logos/existing-logo.png');
     expect($user->hero_foto)->toBe('herofotos/existing-hero.png');
 });
+
+it('throws validation exception when naam is missing', function () {
+    $user = User::factory()->create();
+
+    $request = makeActionRequest($user, [
+        'email' => 'updated@example.com',
+    ]);
+
+    UpdateWebsiteSettings::run($request, $user);
+})->throws(ValidationException::class);
+
+it('throws validation exception when email is invalid', function () {
+    $user = User::factory()->create();
+
+    $request = makeActionRequest($user, [
+        'naam' => 'Valid Name',
+        'email' => 'not-an-email',
+    ]);
+
+    UpdateWebsiteSettings::run($request, $user);
+})->throws(ValidationException::class);
