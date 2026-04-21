@@ -28,10 +28,20 @@ class UpdateWebsiteSettings
         $user->name = $validated['naam'];
         $user->email = $validated['email'];
         if ($request->hasFile('logo')) {
-            $user->logo = $this->uploadImage($request->file('logo'), 'logo') ?? $user->logo;
+            try{
+                $user->logo = $this->uploadImage($request->file('logo'), 'logo') ?? $user->logo;
+            }
+            catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to upload logo', 'message' => $e->getMessage()], 500);
+            }
         }
         if ($request->hasFile('herofoto')) {
-            $user->hero_foto = $this->uploadImage($request->file('herofoto'), 'herofoto') ?? $user->hero_foto;
+            try{
+                $user->hero_foto = $this->uploadImage($request->file('herofoto'), 'herofoto') ?? $user->hero_foto;
+            }
+            catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to upload hero photo', 'message' => $e->getMessage()], 500);
+            }
         }
         $user->hero_beschrijving = $validated['hero_beschrijving'] ?? $user->hero_beschrijving;
         $user->kleur = $validated['kleur'] ?? $user->kleur;
@@ -69,6 +79,7 @@ class UpdateWebsiteSettings
        if (!$foto) {
             return null;
         }
+        
         if($fieldName === 'logo') {
            $path=  $foto->store('logos', 'public');
         } elseif ($fieldName === 'herofoto') {

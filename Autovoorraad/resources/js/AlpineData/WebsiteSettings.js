@@ -78,7 +78,18 @@ export function websiteSettings(user='') {
                 throw new Error('Failed to get CSRF token');
             }
             var formData = new FormData();
-            formData.append('naam', this.naam);
+            if (this.naam) {
+                formData.append('naam', this.naam);
+            } else{
+                toast.error('Naam is verplicht');
+                return;
+            }
+            if (this.email) {
+                formData.append('email', this.email);
+            } else {
+                toast.error('Email is verplicht');
+                return;
+            }
             if (this.logo instanceof File) {
                 formData.append('logo', this.logo);
             }
@@ -88,7 +99,6 @@ export function websiteSettings(user='') {
             }
             formData.append('hero_beschrijving', this.hero_beschrijving);
             formData.append('telefoonnummer', this.telefoonnummer);
-            formData.append('email', this.email);
             formData.append('plaats', this.plaats);
             formData.append('adres', this.adres);
             formData.append('postcode', this.postcode);

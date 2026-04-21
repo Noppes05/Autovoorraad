@@ -6,7 +6,7 @@
                 <p class="text-md">Pas de informatie op de website aan</p>
             </div>
            
-                <a x-on:click="updateSettings()" class="ml-4 cursor-pointer inline-flex items-center px-8 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
+                <a x-on:click="updateSettings()" tabindex='11' class="ml-4 cursor-pointer inline-flex items-center px-8 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
                     Opslaan 
                     <template x-transition >
                          <svg class="w-5 h-5 text-fg-success shrink-0 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -62,12 +62,12 @@
                             </div>
                             <p>Klik hier om foto te uploaden</p>
                         </div>
-                        <input hidden type="file" x-ref="hero" accept="image/*" tabindex="2" @change="addHero" class="outline-none w-min md:w-full placeholder:font-semibold">
+                        <input hidden type="file" x-ref="hero" accept="image/*" tabindex="4" @change="addHero" class="outline-none w-min md:w-full placeholder:font-semibold">
                 </div>
                 <div class="mb-8">
                     <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">hero beschrijving</p>
                     <div class="rounded bg-gray-100 p-4 uppercase text-sm text-gray-800">
-                        <textarea  tabindex="1" rows="10" x-model="hero_beschrijving" class="outline-none w-min md:w-full placeholder:font-semibold"></textarea>
+                        <textarea  tabindex="5" rows="10" x-model="hero_beschrijving" class="outline-none w-min md:w-full placeholder:font-semibold"></textarea>
                     </div>
                 </div>
                 <div class="flex items-center gap-4 mt-10 mb-8">
@@ -78,13 +78,13 @@
                    <div class="">
                        <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">email</p>
                        <div class="rounded bg-gray-100 p-4 uppercase text-sm text-gray-800">
-                           <input type="text" tabindex="1" x-model="email" placeholder="info@autovoorraad.nl" class="outline-none w-min md:w-full placeholder:font-semibold">
+                           <input type="email" tabindex="6" x-model="email" placeholder="info@autovoorraad.nl" class="outline-none w-min md:w-full placeholder:font-semibold">
                        </div>
                    </div>
                    <div class="">
                        <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">telefoonnummer</p>
                        <div class="rounded bg-gray-100 p-4 uppercase text-sm text-gray-800">
-                           <input type="text" tabindex="1" x-model="telefoonnummer" placeholder="06 12345678" class="outline-none w-min md:w-full placeholder:font-semibold">
+                           <input type="text" tabindex="7" x-model="telefoonnummer" placeholder="06 12345678" class="outline-none w-min md:w-full placeholder:font-semibold">
                        </div>
                    </div>
     
@@ -95,19 +95,19 @@
                    <div class="">
                        <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">plaats</p>
                        <div class="rounded bg-gray-100 p-4 uppercase text-sm text-gray-800">
-                           <input type="text" tabindex="1" x-model="plaats" placeholder="Amsterdam, Rotterdam, Den haag" class="outline-none w-min md:w-full placeholder:font-semibold">
+                           <input type="text" tabindex="8" x-model="plaats" placeholder="Amsterdam, Rotterdam, Den haag" class="outline-none w-min md:w-full placeholder:font-semibold">
                        </div>
                    </div>
                    <div class="">
                        <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">adres</p>
                        <div class="rounded bg-gray-100 p-4 uppercase text-sm text-gray-800">
-                           <input type="text" tabindex="1" x-model="adres" placeholder="De straat 123" class="outline-none w-min md:w-full placeholder:font-semibold">
+                           <input type="text" tabindex="9" x-model="adres" placeholder="De straat 123" class="outline-none w-min md:w-full placeholder:font-semibold">
                        </div>
                    </div>
                    <div class="">
                        <p class="uppercase relative mb-3 h-max text-[#454652] text-sm tracking-wider font-semibold">postcode</p>
                        <div class="rounded bg-gray-100 p-4 uppercase text-sm text-gray-800">
-                           <input type="text" tabindex="1" x-model="postcode" placeholder="1234XX" class="outline-none w-min md:w-full placeholder:font-semibold uppercase placeholder:uppercase">
+                           <input type="text" tabindex="10" x-model="postcode" placeholder="1234XX" class="outline-none w-min md:w-full placeholder:font-semibold uppercase placeholder:uppercase">
                        </div>
                    </div>
     
