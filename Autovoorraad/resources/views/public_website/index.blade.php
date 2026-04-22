@@ -18,22 +18,22 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
         
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/publicsite.js'])
     </head>
     {{-- @dd($tenant) --}}
-    <body style="--primary_color: {{ $tenant->kleur }}" class="antialiased font-sans">
+    <body x-data="publicHomePage()" style="--primary_color: {{ $tenant->kleur }}" class="antialiased font-sans">
         <section class="relative w-full ">
             <div class="relative top-0 left-0 w-full h-full overflow-hidden">
                 <img src="{{ asset($tenant->herofoto) }}" alt="Background Image" class="w-full h-auto object-center object-cover">
             </div>
             <div style="background-image: linear-gradient(to right, color-mix(in srgb, var(--primary_color) 70%, transparent) 0%, rgba(0, 0, 0, 0.2) 50%);"
                 class="absolute z-0 top-0 left-0 flex flex-col items-start h-full mx-auto w-full justify-center  px-4">
-                <h1 class="text-5xl md:text-7xl ml-12  text-white mb-6 w-1/2 ">Welkom bij <b style="color: var(--primary_color)" class="font-semibold">{{ $tenant->naam }}.</b></h1>
-                <p class="text-lg md:text-2xl font-light ml-12 text-white mb-8 w-1/2">{{ $tenant->hero_beschrijving }}</p>
+                <h1 class="text-5xl md:text-7xl ml-12 md:ml-24  text-white mb-6 w-1/2 ">Welkom bij <b style="color: var(--primary_color)" class="font-semibold">{{ $tenant->naam }}.</b></h1>
+                <p class="text-lg md:text-2xl font-light ml-12 md:ml-24 text-white mb-8 w-1/2">{{ $tenant->hero_beschrijving }}</p>
             </div>
         </section>
         <section class="w-full relative -top-10 h-64 block">
-            <div class="z-20 mx-12 h-full bg-white rounded-lg border relative border-[var(--primary_color)] p-8">
+            <div class="z-20 mx-12 md:mx-24 h-full bg-white rounded-lg border relative border-[var(--primary_color)] p-8">
                 <div class="flex gap-4 items-center mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="inline-block" viewBox="0 0 20 20" fill="none">
                     <path d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.5208 6.90417 10.7125 6.7125C10.9042 6.52083 11 6.28333 11 6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6C9 6.28333 9.09583 6.52083 9.2875 6.7125C9.47917 6.90417 9.71667 7 10 7ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="currentcolor"/>
@@ -87,10 +87,23 @@
                     </div>
                 </div>
                 <div class="h-px rounded-full w-full my-5 bg-[var(--primary_color)]"></div>
-
-            </div>
-
+                <div class="flex gap-4 items-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-[var(--primary_color)]" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M8 18V12H10V14H18V16H10V18H8ZM0 16V14H6V16H0ZM4 12V10H0V8H4V6H6V12H4ZM8 10V8H18V10H8ZM12 6V0H14V2H18V4H14V6H12ZM0 4V2H10V4H0Z" fill="currentcolor"/>
+                    </svg>
+                    <h2 class="inline text-2xl font-semibold font-serif uppercase">Filters</h2>
+                </div>           
         </section>
+        <section class="mx-12 md:mx-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+            <template x-for="car in cars" :key="car.id">
+                {{-- <div class="border rounded-lg p-4 flex flex-col gap-4">
+                    {{-- <img :src="car.foto" alt="Car Image" class="w-full h-48 object-cover rounded">
+                    <h3 class="text-lg font-semibold">{{ car.merk }} {{ car.model }}</h3>
+                    <p class="text-sm text-gray-600">Prijs: €{{ car.prijs }}</p>
+                    <p class="text-sm text-gray-600">Bouwjaar: {{ car.bouwjaar }}</p>
+                    <a href="#" class="mt-auto bg-[var(--primary_color)] text-white py-2 px-4 rounded text-center">Bekijk Details</a>
+                </div> --}}
+    </section>
     </body>
 </html>
 

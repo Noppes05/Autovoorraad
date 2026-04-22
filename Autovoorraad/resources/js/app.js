@@ -1,7 +1,7 @@
 import './bootstrap';
 import { photoManager } from "./components/PhotoManager";
 import { fotoSlider } from "./components/FotoSlider";
-import { websiteSettings } from "./AlpineData/WebsiteSettings";
+import { publicHomePage } from "./AlpineData/public_Home_page";
 import Splide from '@splidejs/splide';
 import { confirmDeleteStore } from "./utils/confirmDelete/confirmDelete";
 import { confirmDelete } from './utils/confirmDeleteHelper'
@@ -24,8 +24,6 @@ window.Alpine = Alpine;
 
 
 document.addEventListener('alpine:init', () => {
-
-    Alpine.data('websiteSettings', websiteSettings);
     Alpine.store('confirmDelete', confirmDeleteStore());
     Alpine.store('toast', toastsetting()); 
     Alpine.data('autovoorraad', autovoorraad);
