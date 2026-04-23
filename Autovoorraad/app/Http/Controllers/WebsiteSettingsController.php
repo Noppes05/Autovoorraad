@@ -40,6 +40,7 @@ class WebsiteSettingsController extends Controller
                 'plaats' => $user->plaats,
                 'adres' => $user->adres,
                 'postcode' => $user->postcode,
+                'id' => $user->public_id,
             ],
         ]);
     }

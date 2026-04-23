@@ -20,7 +20,7 @@ class PublicWebsiteController extends Controller
     {
         $tenant = $tenant['tenant'];
         return (object)[
-            'id' => $tenant->id,
+            'id' => $tenant->public_id,
             'logo' => $tenant->logo,
             'email' => $tenant->email,
             'telefoonnummer' => $tenant->telefoonnummer,
