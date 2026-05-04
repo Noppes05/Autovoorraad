@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Actions\FetchRdw;
-use App\Models\auto;
+use App\Models\Auto;
 
 
 class AutoAPIGetController extends Controller
@@ -16,6 +16,13 @@ class AutoAPIGetController extends Controller
      */
     public function fetchFromRdw(Request $request)
     {
+        if (! $request->user()?->isPremium()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Alleen premium gebruikers kunnen de RDW-koppeling gebruiken.',
+            ], 403);
+        }
+
         $request->validate([
             'kenteken' => 'required|string|max:10',
         ]);
@@ -44,7 +51,7 @@ class AutoAPIGetController extends Controller
     public function show(Request $request, $id)
     {
         // T1- Threat tenant Data leak: Zorg ervoor dat de auto die wordt opgehaald, daadwerkelijk toebehoort aan de ingelogde gebruiker.
-        $auto = auto::where('id', $id)
+        $auto = Auto::query()->where('id', $id)
             ->where('user_id', $request->user()->id)
             ->with(['fotos' => function ($query) {
                 $query->orderBy('volgorde_nummer');
@@ -61,7 +68,7 @@ class AutoAPIGetController extends Controller
     public function index()
     {
         // T1- Threat tenant Data leak: Zorg ervoor dat alleen auto's worden opgehaald die toebehoren aan de ingelogde gebruiker.
-        $autos = auto::where('user_id', request()->user()->id)
+        $autos = Auto::query()->where('user_id', request()->user()->id)
             ->with(['fotos' => function ($query) {
                 $query->orderBy('volgorde_nummer');
             }])
@@ -71,7 +78,7 @@ class AutoAPIGetController extends Controller
     }
 
      // Helper method to normalize auto data for API responses.
-    private function normalizeAuto(auto $auto): array
+    private function normalizeAuto(Auto $auto): array
     {
         return [
             'id' => $auto->id,

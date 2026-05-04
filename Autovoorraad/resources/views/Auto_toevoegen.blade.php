@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="p-4 md:p-10" x-data="add_car">
+    <div class="p-4 md:p-10" x-data="add_car({ canUseRdw: @json(auth()->user()?->isPremium()) })">
         <div class="md:w-full  flex flex-col gap-4 md:gap-0 md:flex-row items-center justify-center md:justify-between mb-4">
             <div>
                 <h1 class="text-2xl md:text-4xl font-serif font-bold text-gray-800">Auto Toevoegen</h1>
@@ -41,7 +41,8 @@
                             <p class="text-[0.6rem] inline text-gray-400 mt-1">RDW gegevens laden...</p>
                         </template>
                     </div>
-                    <p class="mt-2 text-[0.7rem] text-gray-500">RDW Gegevens worden automatisch opgehaald na invoer.</p>
+                    <p class="mt-2 text-[0.7rem] text-gray-500" x-show="canUseRdw">RDW Gegevens worden automatisch opgehaald na invoer.</p>
+                    <p class="mt-2 text-[0.7rem] text-gray-500" x-show="!canUseRdw">RDW koppeling is alleen beschikbaar voor premium gebruikers.</p>
                     <p x-text="rdwData_error" class=" text-[0.6rem] text-red-400 "></p>
                 </div>
                 <div class="grid md:grid-cols-2 grid-rows-6 md:grid-rows-3 w-full gap-y-5 gap-x-10 mt-10">
