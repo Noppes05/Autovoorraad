@@ -26,9 +26,14 @@ class AutoAPIGetController extends Controller
         $request->validate([
             'kenteken' => 'required|string|max:10',
         ]);
-
-        $vehicleData = FetchRdw::run($request->input('kenteken'));
-
+        try {
+            $vehicleData = FetchRdw::run($request->input('kenteken'));
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Er is een fout opgetreden bij het ophalen van de voertuiggegevens: '.$e->getMessage(),
+            ], 500);
+        }
 
         if (! $vehicleData) {
             return response()->json([
