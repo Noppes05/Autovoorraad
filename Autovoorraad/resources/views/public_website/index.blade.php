@@ -94,39 +94,73 @@
                     <h2 class="inline text-2xl  font-semibold font-serif uppercase">Filters</h2>
                 </div>   
                 <div class="flex w-full gap-4 flex-col md:flex-row">
-                    <div class="w-1/4">
+                    <div class="md:w-1/4 relative">
                         <p class="uppercase relative text-[#454652] text-sm tracking-wider mb-3 font-semibold">merk</p>
-                        <div class="rounded p-4 bg-gray-100 text-sm">
-                            <select class="w-full rounded border-gray-300" x-model="filters.merk">
-                                <option value="">Alle merken</option>
+                        <button @click="toggleDropdown('brands')" class="w-full rounded p-4 bg-gray-100 text-sm text-left font-medium hover:bg-gray-200 transition-colors duration-200 flex justify-between items-center group">
+                            <span x-show="filters.brands.length === 0">Alle merken</span>
+                            <span x-show="filters.brands.length > 0" x-text="filters.brands.length + ' geselecteerd'"></span>
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:text-[var(--primary_color)]" :class="{'rotate-180': openDropdown === 'brands'}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </button>
+                        <div x-show="openDropdown === 'brands'" @click.outside="closeDropdown()" x-transition class="absolute top-full left-0 right-0 mt-2 bg-white rounded border border-[var(--primary_color)] shadow-lg z-50">
+                            <div class="p-4 space-y-3 max-h-60 overflow-y-auto">
                                 <template x-for="merk in merken" :key="merk">
-                                    <option :value="merk" x-text="merk"></option>
+                                    <label class="flex items-center cursor-pointer group/checkbox">
+                                        <input type="checkbox" class="sr-only" @change="toggleBrand(merk)" :checked="isBrandSelected(merk)">
+                                        <div class="w-5 h-5 rounded border-2 border-gray-300 bg-white group-hover/checkbox:border-[var(--primary_color)] transition-all duration-200 flex items-center justify-center" :class="{'bg-[var(--primary_color)] border-[var(--primary_color)]': isBrandSelected(merk)}">
+                                            <template x-if="isBrandSelected(merk)">
+                                                <svg class="w-3.5 h-3.5 text-[var(--primary_color)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                </svg>
+                                            </template>
+                                        </div>
+                                        <span class="ml-3 text-sm font-medium group-hover/checkbox:text-[var(--primary_color)] transition-colors duration-200" x-text="merk"></span>
+                                    </label>
                                 </template>
-                            </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="w-1/4">
-                        <p class="uppercase relative text-[#454652] text-sm tracking-wider mb-3 font-semibold">merk</p>
-                        <div class="rounded p-4 bg-gray-100 text-sm">
-                            <select class="w-full rounded border-gray-300" x-model="filters.merk">
-                                <option value="">Alle merken</option>
-                                <template x-for="merk in merken" :key="merk">
-                                    <option :value="merk" x-text="merk"></option>
+
+                    <div class="md:w-1/4 relative">
+                        <p class="uppercase relative text-[#454652] text-sm tracking-wider mb-3 font-semibold">model</p>
+                        <button @click="toggleDropdown('models')" :disabled="filters.brands.length === 0" class="w-full rounded p-4 bg-gray-100 text-sm text-left font-medium hover:bg-gray-200 transition-colors duration-200 flex justify-between items-center group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-100">
+                            <span x-show="filters.models.length === 0">Selecteer model</span>
+                            <span x-show="filters.models.length > 0" x-text="filters.models.length + ' geselecteerd'"></span>
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:text-[var(--primary_color)]" :class="{'rotate-180': openDropdown === 'models'}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </button>
+                        <div x-show="openDropdown === 'models'" @click.outside="closeDropdown()" x-transition class="absolute top-full left-0 right-0 mt-2 bg-white rounded border border-[var(--primary_color)] shadow-lg z-50">
+                            <div class="p-4 space-y-3 max-h-60 overflow-y-auto">
+                                <template x-for="model in availableModels" :key="model">
+                                    <label class="flex items-center cursor-pointer group/checkbox">
+                                        <input type="checkbox" class="sr-only" @change="toggleModel(model)" :checked="isModelSelected(model)">
+                                        <div class="w-5 h-5 rounded border-2 border-gray-300 bg-white group-hover/checkbox:border-[var(--primary_color)] transition-all duration-200 flex items-center justify-center" :class="{'bg-[var(--primary_color)] border-[var(--primary_color)]': isModelSelected(model)}">
+                                            <template x-if="isModelSelected(model)">
+                                                <svg class="w-3.5 h-3.5 text-[var(--primary_color)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                </svg>
+                                            </template>
+                                        </div>
+                                        <span class="ml-3 text-sm font-medium group-hover/checkbox:text-[var(--primary_color)] transition-colors duration-200" x-text="model"></span>
+                                    </label>
                                 </template>
-                            </select>
+                            </div>
                         </div>
-                    </div>        
-                    <div class="w-1/4">
+                    </div>
+
+                    <div class="md:w-1/4">
                         <p class="uppercase relative text-[#454652] text-sm tracking-wider mb-3 font-semibold">min prijs</p>
                         <div class="rounded p-4 bg-gray-100 text-sm">
-                            <input class="w-full rounded border-gray-300" placeholder="€0" x-model="filters.min_prijs"/>
-                                
+                            <input class="w-full rounded border-gray-300 focus:border-[var(--primary_color)] focus:ring-[var(--primary_color)] transition-colors duration-200" placeholder="€0" type="number" x-model="tempMinPrice" @blur="onPriceBlur('min')"/>
                         </div>
                     </div>
-                    <div class="w-1/4">
+
+                    <div class="md:w-1/4">
                         <p class="uppercase relative text-[#454652] text-sm tracking-wider mb-3 font-semibold">max prijs</p>
                         <div class="rounded p-4 bg-gray-100 text-sm">
-                            <input class="w-full rounded border-gray-300" placeholder="€100.000" x-model="filters.max_prijs"/>
+                            <input class="w-full rounded border-gray-300 focus:border-[var(--primary_color)] focus:ring-[var(--primary_color)] transition-colors duration-200" placeholder="€100.000" type="number" x-model="tempMaxPrice" @blur="onPriceBlur('max')"/>
                         </div>
                     </div>
 
@@ -134,7 +168,15 @@
         </section>
         <section class="mx-12 md:mx-24 mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
             <template x-for="car in cars" :key="car.id">
-                <div class="border border-[var(--primary_color)] group rounded-lg overflow-hidden">
+                <div
+                    x-show="carMatchesFilter(car)"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="border border-[var(--primary_color)] group rounded-lg overflow-hidden">
                     <div class="h-65 w-full relative overflow-hidden">
                         <img :src="car.fotos[0].url" alt="Car Image" class="w-full group-hover:scale-110 h-full transition-all duration-200 object-cover object-center">
                         <template x-if="car.status === 'beschikbaar'">
