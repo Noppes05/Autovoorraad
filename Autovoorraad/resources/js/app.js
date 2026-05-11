@@ -13,6 +13,7 @@ import { autoDetails } from './AlpineData/autoDetails';
 import { manageAutoPhotos } from './AlpineData/manageAutoPhotos';
 import { updateCar } from './AlpineData/updateCar';
 import { autovoorraad } from './AlpineData/autovoorraad';
+import { websiteSettings } from './AlpineData/WebsiteSettings';
 import Alpine from 'alpinejs';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -30,6 +31,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('autoDetails', autoDetails);
     Alpine.data('manageAutoPhotos', manageAutoPhotos);
     Alpine.data('updateCar', updateCar);
+    Alpine.data('websiteSettings', websiteSettings);
     Alpine.data('photoManager', photoManager);
     Alpine.data('fotoSlider', fotoSlider);
     Alpine.data('add_car', add_car);

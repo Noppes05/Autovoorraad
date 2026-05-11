@@ -60,7 +60,7 @@
                         </div>
                         <div>
                             <p class="uppercase relative text-[#454652] text-sm tracking-wider font-semibold">aantal op voorraad</p>
-                            <p class="text-md font-bold tracking-wider">24 auto's</p>
+                            <p class="text-md font-bold tracking-wider"><span x-text="cars.length"></span> auto's</p>
                         </div>
                     </div>
                     <div class="flex gap-3  md:w-1/4  self-center md:self-start">
@@ -202,7 +202,7 @@
                             <p class="inline" x-text="car.km_stand + ' km'"></p>
                         </div>
                         <template x-if="car.status === 'beschikbaar'|| car.status === 'net nieuw'">
-                        <a href="#" class="text-[var(--primary_color)] w-full py-4 border-2 text-center border-[var(--primary_color)] rounded text-[var(--primary_color)] hover:text-white bg-transparent hover:bg-[var(--primary_color)] uppercase transition duration-200 font-semibold">Bekijk Details</a>
+                        <a :href="'/auto/' + car.id" class="text-[var(--primary_color)] w-full py-4 border-2 text-center border-[var(--primary_color)] rounded text-[var(--primary_color)] hover:text-white bg-transparent hover:bg-[var(--primary_color)] uppercase transition duration-200 font-semibold">Bekijk Details</a>
                         </template>
                         <template x-if="car.status === 'verkocht'">
                             <a href="#" class="text-[var(--primary_color)]/60  w-full py-4 border-2 text-center border-[var(--primary_color)]/60 rounded bg-transparent uppercase font-semibold cursor-not-allowed">nu niet beschikbaar</a>

@@ -16,6 +16,16 @@ class PublicWebsiteController extends Controller
         return view('public_website.index', ['tenant' => $user]);
     }
 
+    public function detail(Request $request, $tenantId, $publicId)
+    {
+        $tenant = $request->attributes->get('tenant');
+        if (!$tenant) {
+            abort(404, 'Tenant not found');
+        }
+        $user = $this->validTenantInfo($tenant);
+        return view('public_website.detail', ['tenant' => $user, 'carPublicId' => $publicId]);
+    }
+
     private function validTenantInfo($tenant)
     {
         $tenant = $tenant['tenant'];

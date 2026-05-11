@@ -16,6 +16,7 @@ export function websiteSettings(user='') {
         isSaving: false,
         save_loading:false,
         async init() {
+            console.log('Initializing Alpine component with user ID:', user);
             if (!user) {
                 console.error('User ID is required to fetch website settings.');
                 toast.error('Kon gebruiker Id niet vinden. Website instellingen kunnen niet worden geladen.');
@@ -35,6 +36,7 @@ export function websiteSettings(user='') {
                 }
                 const data = await response.json();
                 const settings = data.settings || {};
+                console.log('Fetched website settings:', settings);
                 this.naam = settings.naam || '';
                 this.logo = settings.logo || null;
                 this.kleur = settings.kleur || '#000000';
