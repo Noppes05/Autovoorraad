@@ -174,7 +174,7 @@
                                         <div :class="{'bg-green-100 text-green-700': !formMessage.includes('Error'), 'bg-red-100 text-red-700': formMessage.includes('Error')}" class="p-4 rounded text-sm" x-text="formMessage"></div>
                                     </template>
 
-                                    <button type="submit" :disabled="formSubmitting" class="w-full bg-[var(--primary_color)] text-white font-semibold py-4 rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide">
+                                    <button type="submit" :disabled="formSubmitting" class="w-full bg-[var(--primary_color)] text-white font-semibold py-4 rounded hover:bg-transparent hover:text-[var(--primary-color)] border border-transparent hover:border-[var(--primary_color)] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer uppercase tracking-wide">
                                         <span x-show="!formSubmitting">Boek jouw proefrit →</span>
                                         <span x-show="formSubmitting">Bezig met verzenden...</span>
                                     </button>
