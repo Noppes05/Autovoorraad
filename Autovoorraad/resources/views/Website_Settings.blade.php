@@ -6,12 +6,23 @@
                 <p class="text-md">Pas de informatie op de website aan</p>
             </div>
            
-                <a x-on:click="updateSettings()" tabindex='11' class="ml-4 cursor-pointer inline-flex items-center px-8 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out">
-                    Opslaan 
-                    <template x-transition >
-                         <svg class="w-5 h-5 text-fg-success shrink-0 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                        </svg>
+                <a x-on:click="updateSettings()" :disabled="save_loading" tabindex='11' class="ml-4 cursor-pointer inline-flex items-center px-8 py-3 bg-blaze-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blaze-orange-700 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 active:bg-gray-900 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed" :class="{'opacity-50 cursor-not-allowed': save_loading}">
+                    <template x-if="!save_loading">
+                        <div class="flex items-center gap-2">
+                            <span>Opslaan</span>
+                            <svg class="w-5 h-5 text-fg-success shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                            </svg>
+                        </div>
+                    </template>
+                    <template x-if="save_loading">
+                        <div class="flex items-center gap-2">
+                            <span>Opslaan</span>
+                            <svg class="w-5 h-5 text-white shrink-0 animate-spin" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
                     </template>
                 </a>
         </div>

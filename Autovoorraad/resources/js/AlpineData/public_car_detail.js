@@ -7,7 +7,8 @@ export function publicCarDetail(tenantId,carPublicId) {
             naam: '',
             email: '',
             telefoonnummer: '',
-            datumtijd: ''
+            datumtijd: '',
+            bericht: ''
         },
         formSubmitting: false,
         formMessage: '',
@@ -130,7 +131,8 @@ export function publicCarDetail(tenantId,carPublicId) {
                 naam: '',
                 email: '',
                 telefoonnummer: '',
-                datumtijd: ''
+                datumtijd: '',
+                bericht: ''
             };
         }
     };

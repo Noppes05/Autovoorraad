@@ -81,7 +81,7 @@
                             </div>
 
                             <!-- Thumbnail Carousel -->
-                            <template x-if="car.fotos.length > 1">
+                            <template x-if="car.fotos.length >= 1">
                                 <div class="mb-12">
                                     <div id="thumb-carousel" class="splide">
                                         <div class="splide__track">
@@ -145,7 +145,7 @@
                             <div class="bg-gray-50 rounded-lg p-8 sticky top-24">
                                 <h3 class="text-2xl font-bold font-serif mb-2">Boek een proefrit</h3>
                                 <p class="text-sm text-gray-600 mb-6">
-                                    Ervaarvaren en beleef deze auto bij <span class="text-[var(--primary_color)] font-semibold">{{ $tenant->naam }}</span>
+                                    Ervaar en beleef deze auto bij <span class="text-[var(--primary_color)] font-semibold">{{ $tenant->naam }}</span>
                                 </p>
 
                                 <form @submit.prevent="submitProefrit" class="space-y-4">
@@ -168,6 +168,11 @@
                                             <label class="block text-sm font-semibold text-gray-700 mb-2">Datum/Tijd</label>
                                             <input type="datetime-local" x-model="proefritForm.datumtijd" class="w-full px-4 py-3 rounded border border-gray-300 focus:border-[var(--primary_color)] focus:ring-2 focus:ring-[var(--primary_color)]/20 transition-all">
                                         </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Bericht <span class="font-normal text-gray-500">(optioneel)</span></label>
+                                        <textarea x-model="proefritForm.bericht" rows="4" placeholder="Laat hier een bericht achter voor de proefrit" class="w-full px-4 py-3 rounded border border-gray-300 focus:border-[var(--primary_color)] focus:ring-2 focus:ring-[var(--primary_color)]/20 transition-all resize-none"></textarea>
                                     </div>
 
                                     <template x-if="formMessage">
