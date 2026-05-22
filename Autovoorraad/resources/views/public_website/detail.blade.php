@@ -172,14 +172,14 @@
 
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-2">Bericht <span class="font-normal text-gray-500">(optioneel)</span></label>
-                                        <textarea x-model="proefritForm.bericht" rows="4" placeholder="Laat hier een bericht achter voor de proefrit" class="w-full px-4 py-3 rounded border border-gray-300 focus:border-[var(--primary_color)] focus:ring-2 focus:ring-[var(--primary_color)]/20 transition-all resize-none"></textarea>
+                                        <textarea x-model="proefritForm.bericht" rows="4" placeholder="Laat hier een bericht achter voor de proefrit" class="w-full px-4 py-3 rounded border border-gray-300 focus:border-(--primary_color) focus:ring-2 focus:ring-[var(--primary_color)] transition-all resize-none"></textarea>
                                     </div>
 
                                     <template x-if="formMessage">
                                         <div :class="{'bg-green-100 text-green-700': !formMessage.includes('Error'), 'bg-red-100 text-red-700': formMessage.includes('Error')}" class="p-4 rounded text-sm" x-text="formMessage"></div>
                                     </template>
 
-                                    <button type="submit" :disabled="formSubmitting" class="w-full bg-[var(--primary_color)] text-white font-semibold py-4 rounded hover:bg-transparent hover:text-[var(--primary-color)] border border-transparent hover:border-[var(--primary_color)] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer uppercase tracking-wide">
+                                    <button type="submit" :disabled="formSubmitting" class="w-full bg-(--primary_color) text-white font-semibold py-4 rounded hover:bg-transparent hover:text-[var(--primary-color)] border border-transparent hover:border-(--primary_color) transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer uppercase tracking-wide">
                                         <span x-show="!formSubmitting">Boek jouw proefrit →</span>
                                         <span x-show="formSubmitting">Bezig met verzenden...</span>
                                     </button>
