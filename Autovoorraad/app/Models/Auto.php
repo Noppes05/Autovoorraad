@@ -11,6 +11,7 @@ class Auto extends Model
 
     protected $fillable = [
         'user_id',
+        'public_id',
         'merk',
         'model',
         'kenteken',
@@ -34,5 +35,13 @@ class Auto extends Model
     public function proefritten()
     {
         return $this->hasMany(Proefrit::class);
+    }
+
+    /**
+     * Generate UUIDs for both primary id and public_id on create.
+     */
+    public function uniqueIds(): array
+    {
+        return ['id', 'public_id'];
     }
 }

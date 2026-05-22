@@ -6,6 +6,8 @@ export default defineConfig(({ mode }) => {
     const appUrl = new URL(env.APP_URL || 'http://localhost');
     const appHost = appUrl.hostname;
     const isHttps = appUrl.protocol === 'https:';
+    const escapedAppHost = appHost.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const tenantOriginPattern = new RegExp(`^https?:\\/\\/(?:[a-z0-9-]+\\.)*${escapedAppHost}(?::\\d+)?$`, 'i');
 
     return {
         server: {
@@ -13,7 +15,7 @@ export default defineConfig(({ mode }) => {
             port: 5173,
             strictPort: true,
             cors: {
-                origin: [appUrl.origin],
+                origin: [appUrl.origin, tenantOriginPattern],
                 credentials: true,
             },
             hmr: {

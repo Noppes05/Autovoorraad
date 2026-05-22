@@ -16,6 +16,7 @@ export function websiteSettings(user='') {
         isSaving: false,
         save_loading:false,
         async init() {
+            console.log('Initializing Alpine component with user ID:', user);
             if (!user) {
                 console.error('User ID is required to fetch website settings.');
                 toast.error('Kon gebruiker Id niet vinden. Website instellingen kunnen niet worden geladen.');
@@ -35,6 +36,7 @@ export function websiteSettings(user='') {
                 }
                 const data = await response.json();
                 const settings = data.settings || {};
+                console.log('Fetched website settings:', settings);
                 this.naam = settings.naam || '';
                 this.logo = settings.logo || null;
                 this.kleur = settings.kleur || '#000000';
@@ -70,23 +72,27 @@ export function websiteSettings(user='') {
         },
         async updateSettings() {
             console.log(this.logo)
+            this.save_loading = true;
             const csrf = await fetch('/sanctum/csrf-cookie', {
                 method: 'GET',
                 credentials: 'include',
             });
             if (!csrf.ok) {
+                this.save_loading = false;
                 throw new Error('Failed to get CSRF token');
             }
             var formData = new FormData();
             if (this.naam) {
                 formData.append('naam', this.naam);
             } else{
+                this.save_loading = false;
                 toast.error('Naam is verplicht');
                 return;
             }
             if (this.email) {
                 formData.append('email', this.email);
             } else {
+                this.save_loading = false;
                 toast.error('Email is verplicht');
                 return;
             }
@@ -121,6 +127,8 @@ export function websiteSettings(user='') {
                 console.error('Fout bij bijwerken website instellingen:', error);
                 const message = error instanceof Error ? error.message : 'Failed to update website settings';
                 toast.error(message);
+            } finally {
+                this.save_loading = false;
             }
         },
         addlogo(event){

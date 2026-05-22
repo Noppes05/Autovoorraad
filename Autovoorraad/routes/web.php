@@ -4,6 +4,7 @@ use App\Http\Controllers\AutoAPIController;
 use App\Http\Controllers\AutoAPIGetController;
 use App\Http\Controllers\AutoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicApiController;
 use App\Http\Controllers\PublicWebsiteController;
 use App\Http\Controllers\WebsiteSettingsController;
 use App\Http\Middleware\SubdomainTenantDetection;
@@ -15,6 +16,9 @@ Route::get('/', function () {
 });
 Route::domain('{tenant}.'.parse_url(config('app.url'), PHP_URL_HOST))->group(function () {
     Route::get('/', [PublicWebsiteController::class, 'index'])->middleware(SubdomainTenantDetection::class);
+    Route::get('/auto/{publicId}', [PublicWebsiteController::class, 'detail'])->middleware(SubdomainTenantDetection::class);
+    route::get('/Autos', [PublicApiController::class, 'GetAutos'])->middleware(SubdomainTenantDetection::class);
+    route::get('/AutoDetail', [PublicApiController::class, 'GetAutoDetail'])->middleware(SubdomainTenantDetection::class);
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

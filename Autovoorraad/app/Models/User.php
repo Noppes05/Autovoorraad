@@ -24,6 +24,7 @@ use Laravel\Sanctum\HasApiTokens;
     'postcode',
     'hero_foto',
     'hero_beschrijving',
+    'public_id',
     'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -49,6 +50,13 @@ class User extends Authenticatable
         return $this->hasMany(Auto::class);
     }
 
+    /**
+     * Generate UUIDs for both primary id and public_id on create.
+     */
+    public function uniqueIds(): array
+    {
+        return ['id', 'public_id'];
+    }
     public function isPremium(): bool
     {
         return $this->role === 'premium';
