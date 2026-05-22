@@ -34,6 +34,17 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <div class="mt-4">
+            <x-input-label for="role" :value="__('Rol')" />
+            <div class="flex items-center bg-gray-200 text-black rounded-md mt-1 p-4 gap-3">
+                <select id="role" name="role" class="block bg-gray-200 mt-1 w-full outline-none" required>
+                    <option value="basic" @selected(old('role', 'basic') === 'basic')>Basic gebruiker</option>
+                    <option value="premium" @selected(old('role') === 'premium')>Premium gebruiker</option>
+                </select>
+            </div>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />

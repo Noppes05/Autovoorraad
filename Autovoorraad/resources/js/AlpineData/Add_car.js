@@ -1,7 +1,8 @@
 import { toast } from "../utils/toast";
 
-export function add_car() {
+export function add_car(config = {}) {
     return {
+        canUseRdw: config.canUseRdw ?? false,
         kenteken: '',
         merk: '',
         model: '',
@@ -21,49 +22,58 @@ export function add_car() {
                 credentials: 'include',
             });
         },
-        handleKentekenInput() {
+        async handleKentekenInput() {
            this.kenteken = this.kenteken.replace(/\s/g, '').toUpperCase().replace('-','');
            this.kenteken = this.kenteken.replace(/[^A-Z0-9-]/g, '');
            console.log('Kenteken ingevoerd:', this.kenteken);
+            if (!this.canUseRdw) {
+                this.rdwData_error = 'RDW koppeling is alleen beschikbaar voor premium gebruikers.';
+                return;
+            }
+
             if (this.kenteken.trim() === '') {
             console.warn('Kenteken is leeg. Geen gegevens op te halen.');
+            this.rdwData_error = '';
             return;
             }
             if(this.kenteken.length < 6 || this.kenteken.length > 10) {
                 console.warn('Ongeldig kenteken formaat. Controleer de invoer.');
+                this.rdwData_error = 'Ongeldig kenteken formaat. Controleer de invoer.';
                 return;
             }
             this.rdwData_loading = true;
-            fetch(`/api/rdw/kenteken`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                   'accept': 'application/json',
-                    'X-XSRF-TOKEN': decodeURIComponent(this.getCookie('XSRF-TOKEN'))
-                },
-                body: JSON.stringify({ kenteken: this.kenteken })}
-                )
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data['data']);
-                    if (data['data'] !=undefined) {
-                        console.log('RDW Data gevonden:', data['data']);
-                        this.merk = data['data']["merk"];
-                        this.model = data['data']["model"];
-                        this.bouwjaar = data['data']["bouwjaar"];
-                        if(data['data']["kilometer_stand"] != null){
-                            this.km_stand = data['data']["kilometer_stand"];
-                        }
-                        this.rdwData_error = '';
-                        this.rdwData_loading = false;
-                    }else{
-                        this.rdwData_error = 'Geen gegevens gevonden voor dit kenteken. Controleer de invoer.';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
+            try {
+                const response = await fetch(`/api/rdw/kenteken`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                       'accept': 'application/json',
+                        'X-XSRF-TOKEN': decodeURIComponent(this.getCookie('XSRF-TOKEN'))
+                    },
+                    body: JSON.stringify({ kenteken: this.kenteken })
                 });
+
+                const data = await response.json();
+                console.log(data['data']);
+                if (data['data'] != undefined) {
+                    console.log('RDW Data gevonden:', data['data']);
+                    this.merk = data['data']["merk"];
+                    this.model = data['data']["model"];
+                    this.bouwjaar = data['data']["bouwjaar"];
+                    if(data['data']["kilometer_stand"] != null){
+                        this.km_stand = data['data']["kilometer_stand"];
+                    }
+                    this.rdwData_error = '';
+                } else {
+                    this.rdwData_error = data?.message ?? 'Geen gegevens gevonden voor dit kenteken. Controleer de invoer.';
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                this.rdwData_error = 'Er ging iets mis bij het ophalen van RDW gegevens.';
+            } finally {
+                this.rdwData_loading = false;
+            }
         } ,
 
         updateFotos(fotos) {

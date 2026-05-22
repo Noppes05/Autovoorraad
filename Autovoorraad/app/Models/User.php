@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 #[Fillable(['name',
     'email',
+    'role',
     'password',
     'logo',
     'kleur',
@@ -55,5 +56,9 @@ class User extends Authenticatable
     public function uniqueIds(): array
     {
         return ['id', 'public_id'];
+    }
+    public function isPremium(): bool
+    {
+        return $this->role === 'premium';
     }
 }
